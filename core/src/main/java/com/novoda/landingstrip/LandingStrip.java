@@ -3,6 +3,7 @@ package com.novoda.landingstrip;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -82,8 +83,8 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    protected void dispatchDraw(@NonNull Canvas canvas) {
+        super.dispatchDraw(canvas);
         if (tabsContainer.isEmpty()) {
             return;
         }
@@ -150,7 +151,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
 
     private final OnClickListener onTabClick = new OnClickListener() {
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             int position = (int) view.getTag(TAG_KEY_POSITION);
             state.updateFastForwardPosition(position);
             viewPager.setCurrentItem(position);
