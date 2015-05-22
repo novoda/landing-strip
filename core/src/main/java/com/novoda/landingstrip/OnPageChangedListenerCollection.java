@@ -18,23 +18,23 @@ class OnPageChangedListenerCollection implements ViewPager.OnPageChangeListener 
     }
 
     @Override
-    public void onPageScrolled(int i, float v, int i1) {
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         for (ViewPager.OnPageChangeListener listener : listeners) {
-            listener.onPageScrolled(i, v, i1);
+            listener.onPageScrolled(position, positionOffset, positionOffsetPixels);
         }
     }
 
     @Override
-    public void onPageSelected(int i) {
+    public void onPageSelected(int position) {
         for (ViewPager.OnPageChangeListener listener : listeners) {
-            listener.onPageSelected(i);
+            listener.onPageSelected(position);
         }
     }
 
     @Override
-    public void onPageScrollStateChanged(int i) {
+    public void onPageScrollStateChanged(int state) {
         for (ViewPager.OnPageChangeListener listener : listeners) {
-            listener.onPageScrollStateChanged(i);
+            listener.onPageScrollStateChanged(state);
         }
     }
 
