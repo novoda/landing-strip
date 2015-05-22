@@ -55,18 +55,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         tabsContainer.attachTo(this);
     }
 
-    /**
-     * Deprecated in favour of {@link #addOnPageChangeListener(ViewPager.OnPageChangeListener)}.
-     * <p/>
-     * Using this method in combination with {@link #addOnPageChangeListener(ViewPager.OnPageChangeListener)} has unguarded consequences.
-     *
-     * @param onPageChangeListener
-     */
-    @Deprecated
-    public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        state.updateDelegateOnPageListener(onPageChangeListener);
-    }
-
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         onPageChangeListenerCollection.add(onPageChangeListener);
         state.updateDelegateOnPageListener(onPageChangeListenerCollection);
