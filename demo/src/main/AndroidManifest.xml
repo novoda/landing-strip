@@ -43,6 +43,13 @@
       </intent-filter>
     </activity>
 
+    <activity android:name="com.novoda.landingstrip.MultipleListenersActivity">
+      <intent-filter android:label="LS: Multiple Listeners">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
   </application>
 
 </manifest>

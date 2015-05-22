@@ -26,6 +26,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
 
     private ViewPager viewPager;
     private TabSetterUpper tabSetterUpper;
+    private OnPageChangedListenerCollection onPageChangeListenerCollection;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,8 +41,9 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.pagerAdapterObserver = new PagerAdapterObserver(this);
         this.tabsContainer = TabsContainer.newInstance(context, attributes);
+        this.onPageChangeListenerCollection = OnPageChangedListenerCollection.newInstance();
 
-        state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
+        state.updateDelegateOnPageListener(onPageChangeListenerCollection);
         state.updatePosition(0);
         state.updatePositionOffset(0);
         state.invalidateFastForwardPosition();
@@ -53,8 +55,21 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         tabsContainer.attachTo(this);
     }
 
-    public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
-        state.updateDelegateOnPageListener(delegateOnPageChangeListener);
+    /**
+     * Deprecated in favour of {@link #addOnPageChangeListener(ViewPager.OnPageChangeListener)}.
+     * <p/>
+     * Using this method in combination with {@link #addOnPageChangeListener(ViewPager.OnPageChangeListener)} has unguarded consequences.
+     *
+     * @param onPageChangeListener
+     */
+    @Deprecated
+    public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
+        state.updateDelegateOnPageListener(onPageChangeListener);
+    }
+
+    public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
+        onPageChangeListenerCollection.add(onPageChangeListener);
+        state.updateDelegateOnPageListener(onPageChangeListenerCollection);
     }
 
     public void attach(ViewPager viewPager) {
