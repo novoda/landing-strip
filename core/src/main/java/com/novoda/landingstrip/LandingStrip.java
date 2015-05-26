@@ -156,10 +156,16 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         @Override
         public void onClick(@NonNull View view) {
             int position = (int) view.getTag(TAG_KEY_POSITION);
-            state.updateFastForwardPosition(position);
+            if (notAlreadyAt(position)) {
+                state.updateFastForwardPosition(position);
+            }
             viewPager.setCurrentItem(position);
         }
     };
+
+    private boolean notAlreadyAt(int position) {
+        return position != state.getPosition();
+    }
 
     public interface TabSetterUpper {
         View setUp(int position, CharSequence title, View inflatedTab);
