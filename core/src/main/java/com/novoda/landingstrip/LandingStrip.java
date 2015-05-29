@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Exposer;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -158,6 +159,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
             int position = (int) view.getTag(TAG_KEY_POSITION);
             if (notAlreadyAt(position)) {
                 state.updateFastForwardPosition(position);
+                animateToTab(position);
             }
             viewPager.setCurrentItem(position);
         }
@@ -165,6 +167,31 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
 
     private boolean notAlreadyAt(int position) {
         return position != state.getPosition();
+    }
+
+    private void animateToTab(int newPosition) {
+        int startScrollX = getScrollX();
+        int targetScrollX = calculateScrollOffset(newPosition, 0);
+        Exposer.Animator animator = Exposer.animator();
+        animator.setDuration(300);
+        animator.setUpdateListener(new Exposer.UpdateListener() {
+            @Override
+            public void onUpdate(Exposer.Animator animator) {
+                scrollTo(animator.getAnimatedIntValue(), 0);
+            }
+        });
+        animator.setIntValues(startScrollX, targetScrollX);
+        animator.start();
+    }
+
+    private int calculateScrollOffset(int position, int scrollOffset) {
+        View tabForPosition = tabsContainer.getTabAt(position);
+
+        float tabStartX = tabForPosition.getLeft() + scrollOffset;
+        int viewMiddleOffset = tabsContainer.getParentWidth() / 2;
+        float tabCenterOffset = ((tabForPosition.getRight() - tabForPosition.getLeft()) / 2f);
+
+        return (int) (tabStartX - viewMiddleOffset + tabCenterOffset);
     }
 
     public interface TabSetterUpper {
