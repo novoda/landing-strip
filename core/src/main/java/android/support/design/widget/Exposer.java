@@ -16,10 +16,11 @@ public class Exposer {
         void setIntValues(int from, int to);
 
         void start();
-    }
 
-    public interface UpdateListener {
-        void onUpdate(Animator animator);
+        interface UpdateListener {
+            void onUpdate(Animator animator);
+        }
+
     }
 
     private static class ViewUtilsAnimator implements Animator {

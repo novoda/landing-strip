@@ -42,7 +42,7 @@ class FastForwarder {
         animator.start();
     }
 
-    private final Exposer.UpdateListener updateListener = new Exposer.UpdateListener() {
+    private final Exposer.Animator.UpdateListener updateListener = new Exposer.Animator.UpdateListener() {
         @Override
         public void onUpdate(Exposer.Animator animator) {
             scrollable.scrollTo(animator.getAnimatedIntValue());
