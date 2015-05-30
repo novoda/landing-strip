@@ -1,7 +1,6 @@
 package com.novoda.landingstrip;
 
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
@@ -10,16 +9,18 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final Scrollable scrollable;
     private final FastForwarder fastForwarder;
+    private final OnPageChangedListenerCollection onPageChangedListenerCollection;
 
     private boolean firstTimeAccessed = true;
 
     ScrollingPageChangeListener(State state, TabsContainer tabsContainer, ScrollOffsetCalculator scrollOffsetCalculator,
-                                Scrollable scrollable, FastForwarder fastForwarder) {
+                                Scrollable scrollable, FastForwarder fastForwarder, OnPageChangedListenerCollection onPageChangedListenerCollection) {
         this.state = state;
         this.tabsContainer = tabsContainer;
         this.scrollOffsetCalculator = scrollOffsetCalculator;
         this.scrollable = scrollable;
         this.fastForwarder = fastForwarder;
+        this.onPageChangedListenerCollection = onPageChangedListenerCollection;
     }
 
     @Override
@@ -32,7 +33,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
             scroll(position, positionOffset);
         }
 
-        state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
+        onPageChangedListenerCollection.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
@@ -65,12 +66,12 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     @Override
     public void onPageSelected(int position) {
         tabsContainer.setSelected(position);
-        state.getDelegateOnPageListener().onPageSelected(position);
+        onPageChangedListenerCollection.onPageSelected(position);
     }
 
     @Override
     public void onPageScrollStateChanged(int changedState) {
-        state.getDelegateOnPageListener().onPageScrollStateChanged(changedState);
+        onPageChangedListenerCollection.onPageScrollStateChanged(changedState);
     }
 
 }

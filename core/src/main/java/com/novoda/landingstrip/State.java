@@ -1,21 +1,19 @@
 package com.novoda.landingstrip;
 
-import android.support.v4.view.ViewPager;
-
 class State {
 
-    private ViewPager.OnPageChangeListener delegateOnPageListener;
     private float pagePositionOffset;
     private int position;
-
     private int fastForwardPosition;
 
-    void updateDelegateOnPageListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        this.delegateOnPageListener = onPageChangeListener;
-    }
+    public static State newInstance() {
+        State state = new State();
 
-    ViewPager.OnPageChangeListener getDelegateOnPageListener() {
-        return delegateOnPageListener;
+        state.updateFastForwardPosition(FastForwarder.BYPASSED);
+        state.updatePosition(0);
+        state.updatePositionOffset(0f);
+
+        return state;
     }
 
     public void updatePositionOffset(float positionOffset) {
@@ -26,6 +24,10 @@ class State {
         this.position = position;
     }
 
+    public void updateFastForwardPosition(int fastForwardPosition) {
+        this.fastForwardPosition = fastForwardPosition;
+    }
+
     public float getPagePositionOffset() {
         return pagePositionOffset;
     }
@@ -34,19 +36,8 @@ class State {
         return position;
     }
 
-    public void updateFastForwardPosition(int fastForwardPosition) {
-        this.fastForwardPosition = fastForwardPosition;
-    }
-
     public int getFastForwardPosition() {
         return fastForwardPosition;
     }
 
-    public void invalidateFastForwardPosition() {
-        updateFastForwardPosition(-1);
-    }
-
-    public boolean fastForwardPositionIsValid() {
-        return getFastForwardPosition() != -1;
-    }
 }
