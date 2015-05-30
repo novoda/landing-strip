@@ -24,6 +24,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
     private final PagerAdapterObserver pagerAdapterObserver;
     private final TabsContainer tabsContainer;
+    private final ScrollOffsetCalculator scrollOffsetCalculator;
 
     private ViewPager viewPager;
     private TabSetterUpper tabSetterUpper;
@@ -42,6 +43,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.pagerAdapterObserver = new PagerAdapterObserver(this);
         this.tabsContainer = TabsContainer.newInstance(context, attributes);
+        this.scrollOffsetCalculator = new ScrollOffsetCalculator(tabsContainer);
         this.onPageChangeListenerCollection = OnPageChangedListenerCollection.newInstance();
 
         state.updateDelegateOnPageListener(onPageChangeListenerCollection);
@@ -143,7 +145,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
             View inflatedTabView = tabsContainer.inflateTab(layoutInflater, attributes.getTabLayoutId());
             addTab(position, title, inflatedTabView, tabSetterUpper);
         }
-        tabsContainer.startWatching(viewPager, new ScrollingPageChangeListener(state, tabsContainer, this));
+        tabsContainer.startWatching(viewPager, new ScrollingPageChangeListener(state, tabsContainer, scrollOffsetCalculator, this));
     }
 
     private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
@@ -171,7 +173,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
 
     private void animateToTab(int newPosition) {
         int startScrollX = getScrollX();
-        int targetScrollX = calculateScrollOffset(newPosition, 0);
+        int targetScrollX = scrollOffsetCalculator.calculateScrollOffset(newPosition, 0);
         Exposer.Animator animator = Exposer.animator();
         animator.setDuration(300);
         animator.setUpdateListener(new Exposer.UpdateListener() {
@@ -182,16 +184,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         });
         animator.setIntValues(startScrollX, targetScrollX);
         animator.start();
-    }
-
-    private int calculateScrollOffset(int position, int scrollOffset) {
-        View tabForPosition = tabsContainer.getTabAt(position);
-
-        float tabStartX = tabForPosition.getLeft() + scrollOffset;
-        int viewMiddleOffset = tabsContainer.getParentWidth() / 2;
-        float tabCenterOffset = ((tabForPosition.getRight() - tabForPosition.getLeft()) / 2f);
-
-        return (int) (tabStartX - viewMiddleOffset + tabCenterOffset);
     }
 
     public interface TabSetterUpper {
