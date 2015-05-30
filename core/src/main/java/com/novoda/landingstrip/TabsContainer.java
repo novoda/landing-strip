@@ -59,7 +59,7 @@ class TabsContainer {
                 @Override
                 public void onGlobalLayout() {
                     getTabAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    viewPager.setOnPageChangeListener(onPageChangeListener);
+                    viewPager.addOnPageChangeListener(onPageChangeListener);
 
                     onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0);
                 }
@@ -80,5 +80,9 @@ class TabsContainer {
 
     int getParentWidth() {
         return ((View) tabsContainerView.getParent()).getWidth();
+    }
+
+    boolean hasTabAt(int position) {
+        return getTabCount() - 1 >= position + 1;
     }
 }

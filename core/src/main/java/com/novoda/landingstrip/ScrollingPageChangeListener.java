@@ -1,6 +1,7 @@
 package com.novoda.landingstrip;
 
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
@@ -8,25 +9,25 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     private final TabsContainer tabsContainer;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final Scrollable scrollable;
+    private final FastForwarder fastForwarder;
 
     private boolean firstTimeAccessed = true;
 
-    ScrollingPageChangeListener(State state, TabsContainer tabsContainer, ScrollOffsetCalculator scrollOffsetCalculator, Scrollable scrollable) {
+    ScrollingPageChangeListener(State state, TabsContainer tabsContainer, ScrollOffsetCalculator scrollOffsetCalculator,
+                                Scrollable scrollable, FastForwarder fastForwarder) {
         this.state = state;
         this.tabsContainer = tabsContainer;
         this.scrollOffsetCalculator = scrollOffsetCalculator;
         this.scrollable = scrollable;
+        this.fastForwarder = fastForwarder;
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
-        if (state.fastForwardPositionIsValid()) {
-            fastForward();
-            if (fastForwardPositionReached(position, positionOffset)) {
-                state.invalidateFastForwardPosition();
-            }
+        if (shouldHandleFastForward()) {
+            handleFastForward(position, positionOffset);
         } else {
             scroll(position, positionOffset);
         }
@@ -41,12 +42,17 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
         }
     }
 
-    private boolean fastForwardPositionReached(int position, float positionOffset) {
-        return position == state.getFastForwardPosition() && positionOffset == 0F;
+    private boolean shouldHandleFastForward() {
+        return fastForwarder.shouldHandleFastForward();
     }
 
-    private void fastForward() {
-        scroll(state.getFastForwardPosition(), 0);
+    private void handleFastForward(int position, float positionOffset) {
+        if (fastForwarder.isIdle()) {
+            fastForwarder.fastForward();
+        }
+        if (fastForwarder.isFinished(position, positionOffset)) {
+            fastForwarder.reset();
+        }
     }
 
     private void scroll(int position, float positionOffset) {

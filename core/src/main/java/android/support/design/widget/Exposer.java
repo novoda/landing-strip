@@ -2,16 +2,19 @@ package android.support.design.widget;
 
 public class Exposer {
 
-
     public static Animator animator() {
-        return new ViewUtilsAnimator(ViewUtils.createAnimator());
+        return ViewUtilsAnimator.newInstance();
     }
 
     public interface Animator {
         void setDuration(int duration);
+
         void setUpdateListener(UpdateListener updateListener);
+
         int getAnimatedIntValue();
+
         void setIntValues(int from, int to);
+
         void start();
     }
 
@@ -43,7 +46,7 @@ public class Exposer {
             animator.setUpdateListener(new ValueAnimatorCompat.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimatorCompat valueAnimatorCompat) {
-                  updateListener.onUpdate(new ViewUtilsAnimator(valueAnimatorCompat));
+                    updateListener.onUpdate(new ViewUtilsAnimator(valueAnimatorCompat));
                 }
             });
         }
