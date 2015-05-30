@@ -29,10 +29,7 @@ class FastForwarder {
     void fastForward() {
         fastForwarding = true;
 
-        int fastForwardPosition = state.getFastForwardPosition();
-        state.updatePosition(fastForwardPosition);
-        state.updatePositionOffset(0);
-        animateToTab(fastForwardPosition);
+        animateToTab(state.getFastForwardPosition());
     }
 
     private void animateToTab(int newPosition) {
