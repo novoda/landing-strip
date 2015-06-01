@@ -1,36 +1,39 @@
 package com.novoda.landingstrip;
 
 import android.support.v4.view.ViewPager;
-import android.view.View;
 
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private final State state;
     private final TabsContainer tabsContainer;
+    private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final Scrollable scrollable;
+    private final FastForwarder fastForwarder;
+    private final OnPageChangedListenerCollection onPageChangedListenerCollection;
 
     private boolean firstTimeAccessed = true;
 
-    ScrollingPageChangeListener(State state, TabsContainer tabsContainer, Scrollable scrollable) {
+    ScrollingPageChangeListener(State state, TabsContainer tabsContainer, ScrollOffsetCalculator scrollOffsetCalculator,
+                                Scrollable scrollable, FastForwarder fastForwarder, OnPageChangedListenerCollection onPageChangedListenerCollection) {
         this.state = state;
         this.tabsContainer = tabsContainer;
+        this.scrollOffsetCalculator = scrollOffsetCalculator;
         this.scrollable = scrollable;
+        this.fastForwarder = fastForwarder;
+        this.onPageChangedListenerCollection = onPageChangedListenerCollection;
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
-        if (state.fastForwardPositionIsValid()) {
-            fastForward();
-            if (fastForwardPositionReached(position, positionOffset)) {
-                state.invalidateFastForwardPosition();
-            }
+        if (shouldHandleFastForward()) {
+            handleFastForward(position, positionOffset);
         } else {
             scroll(position, positionOffset);
         }
 
-        state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
+        onPageChangedListenerCollection.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
@@ -40,62 +43,35 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
         }
     }
 
-    private boolean fastForwardPositionReached(int position, float positionOffset) {
-        return position == state.getFastForwardPosition() && positionOffset == 0F;
+    private boolean shouldHandleFastForward() {
+        return fastForwarder.shouldHandleFastForward();
     }
 
-    private void fastForward() {
-        scroll(state.getFastForwardPosition(), 0);
+    private void handleFastForward(int position, float positionOffset) {
+        if (fastForwarder.isIdle()) {
+            fastForwarder.fastForward();
+        }
+        if (fastForwarder.isFinished(position, positionOffset)) {
+            fastForwarder.reset();
+        }
     }
 
     private void scroll(int position, float positionOffset) {
-        int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
-        float newScrollX = calculateScrollOffset(position, scrollOffset, positionOffset);
-
         state.updatePosition(position);
         state.updatePositionOffset(positionOffset);
 
-        scrollable.scrollTo((int) newScrollX);
-    }
-
-    private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
-        int tabWidth = tabsContainer.getTabAt(position).getWidth();
-        return Math.round(swipePositionOffset * tabWidth);
-    }
-
-    private float calculateScrollOffset(int position, int scrollOffset, float pagerOffset) {
-        View tabForPosition = tabsContainer.getTabAt(position);
-
-        float tabStartX = tabForPosition.getLeft() + scrollOffset;
-
-        int viewMiddleOffset = getTabParentWidth() / 2;
-        float tabCenterOffset = (tabForPosition.getRight() - tabForPosition.getLeft()) * 0.5F;
-
-        float nextTabDelta = getNextTabDelta(position, pagerOffset, tabForPosition);
-
-        return tabStartX - viewMiddleOffset + tabCenterOffset + nextTabDelta;
-    }
-
-    private float getNextTabDelta(int position, float pagerOffset, View tabForPosition) {
-        if (tabsContainer.getTabCount() - 1 >= position + 1) {
-            return (((tabsContainer.getTabAt(position + 1).getWidth()) - tabForPosition.getWidth()) * pagerOffset) * 0.5F;
-        }
-        return 0F;
-    }
-
-    private int getTabParentWidth() {
-        return tabsContainer.getParentWidth();
+        scrollable.scrollTo(scrollOffsetCalculator.calculateScrollOffset(position, positionOffset));
     }
 
     @Override
     public void onPageSelected(int position) {
         tabsContainer.setSelected(position);
-        state.getDelegateOnPageListener().onPageSelected(position);
+        onPageChangedListenerCollection.onPageSelected(position);
     }
 
     @Override
     public void onPageScrollStateChanged(int changedState) {
-        state.getDelegateOnPageListener().onPageScrollStateChanged(changedState);
+        onPageChangedListenerCollection.onPageScrollStateChanged(changedState);
     }
 
 }
