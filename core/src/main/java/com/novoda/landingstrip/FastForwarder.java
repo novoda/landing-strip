@@ -4,7 +4,7 @@ import android.support.design.widget.Exposer;
 
 class FastForwarder {
 
-    static final int BYPASSED = -1;
+    static final int BYPASS_FAST_FOWARD = -1;
 
     private final State state;
     private final Scrollable scrollable;
@@ -19,7 +19,7 @@ class FastForwarder {
     }
 
     boolean shouldHandleFastForward() {
-        return state.getFastForwardPosition() != BYPASSED;
+        return state.getFastForwardPosition() != BYPASS_FAST_FOWARD;
     }
 
     boolean isIdle() {
@@ -55,7 +55,7 @@ class FastForwarder {
 
     void reset() {
         fastForwarding = false;
-        state.updateFastForwardPosition(BYPASSED);
+        state.updateFastForwardPosition(BYPASS_FAST_FOWARD);
     }
 
 }
