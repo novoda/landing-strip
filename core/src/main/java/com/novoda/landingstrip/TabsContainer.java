@@ -71,10 +71,10 @@ class TabsContainer {
         return tabsContainerView.getChildCount();
     }
 
-    void setSelected(int position) {
+    void setActivated(int position) {
         for (int index = 0; index < getTabCount(); index++) {
             View tab = getTabAt(index);
-            tab.setSelected(index == position);
+            tab.setActivated(index == position);
         }
     }
 

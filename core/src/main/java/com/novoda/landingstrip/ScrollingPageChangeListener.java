@@ -38,7 +38,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
         if (firstTimeAccessed) {
-            tabsContainer.setSelected(position);
+            tabsContainer.setActivated(position);
             firstTimeAccessed = false;
         }
     }
@@ -65,7 +65,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     @Override
     public void onPageSelected(int position) {
-        tabsContainer.setSelected(position);
+        tabsContainer.setActivated(position);
         onPageChangedListenerCollection.onPageSelected(position);
     }
 
