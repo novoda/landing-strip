@@ -17,7 +17,7 @@ android {
 
 publish {
     userOrg = 'novoda'
-    repoName = 'maven-private'
+    repoName = 'maven'
     groupId = 'com.novoda'
     artifactId = 'landing-strip'
     version = project.version
