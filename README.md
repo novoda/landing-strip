@@ -1,4 +1,4 @@
-# landing-strip [![](https://ci.novoda.com/buildStatus/icon?job=landing-strip)](https://ci.novoda.com/job/landing-strip/lastBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
+# landing-strip [![](https://ci.novoda.com/buildStatus/icon?job=landing-strip)](https://ci.novoda.com/job/landing-strip/lastBuild/console) [![Download](https://api.bintray.com/packages/novoda/maven/landing-strip/images/download.svg) ](https://bintray.com/novoda/maven/landing-strip/_latestVersion) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
 Your simple sliding viewpager tab strip: a landing strip without the fluff!
 
