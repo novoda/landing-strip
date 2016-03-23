@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.novoda:landing-strip:0.0.0'
+    compile 'com.novoda:landing-strip:1.0.0'
 }
 ```
 
