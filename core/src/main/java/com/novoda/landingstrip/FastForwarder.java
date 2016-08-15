@@ -1,6 +1,6 @@
 package com.novoda.landingstrip;
 
-import android.support.design.widget.Exposer;
+import com.novoda.landingstrip.animation.Exposer;
 
 class FastForwarder {
 

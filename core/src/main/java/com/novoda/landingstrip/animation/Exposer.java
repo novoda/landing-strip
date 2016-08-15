@@ -1,4 +1,6 @@
-package android.support.design.widget;
+package com.novoda.landingstrip.animation;
+
+import android.animation.ValueAnimator;
 
 public class Exposer {
 
@@ -25,15 +27,15 @@ public class Exposer {
 
     private static class ViewUtilsAnimator implements Animator {
 
-        private final ValueAnimatorCompat animator;
+        private final ValueAnimator animator;
 
         static ViewUtilsAnimator newInstance() {
-            ValueAnimatorCompat animator = ViewUtils.createAnimator();
-            animator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
-            return new ViewUtilsAnimator(animator);
+            ValueAnimator valueAnimator = new ValueAnimator();
+            valueAnimator.setInterpolator(new FastOutSlowInInterpolator());
+            return new ViewUtilsAnimator(valueAnimator);
         }
 
-        public ViewUtilsAnimator(ValueAnimatorCompat animator) {
+        public ViewUtilsAnimator(ValueAnimator animator) {
             this.animator = animator;
         }
 
@@ -44,17 +46,17 @@ public class Exposer {
 
         @Override
         public void setUpdateListener(final UpdateListener updateListener) {
-            animator.setUpdateListener(new ValueAnimatorCompat.AnimatorUpdateListener() {
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimatorCompat valueAnimatorCompat) {
-                    updateListener.onUpdate(new ViewUtilsAnimator(valueAnimatorCompat));
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    updateListener.onUpdate(new ViewUtilsAnimator(animation));
                 }
             });
         }
 
         @Override
         public int getAnimatedIntValue() {
-            return animator.getAnimatedIntValue();
+            return (int) animator.getAnimatedValue();
         }
 
         @Override
