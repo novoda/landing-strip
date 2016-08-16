@@ -9,7 +9,7 @@ class State {
     public static State newInstance() {
         State state = new State();
 
-        state.updateFastForwardPosition(FastForwarder.BYPASS_FAST_FOWARD);
+        state.updateFastForwardPosition(FastForwarder.BYPASS_FAST_FORWARD);
         state.updatePosition(0);
         state.updatePositionOffset(0f);
 
