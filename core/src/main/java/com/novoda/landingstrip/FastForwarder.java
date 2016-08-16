@@ -1,6 +1,7 @@
 package com.novoda.landingstrip;
 
-import com.novoda.landingstrip.animation.Exposer;
+import com.novoda.landingstrip.animation.Animator;
+import com.novoda.landingstrip.animation.TabAnimator;
 
 class FastForwarder {
 
@@ -35,16 +36,16 @@ class FastForwarder {
     private void animateToTab(int newPosition) {
         int startScrollX = scrollable.getCurrentScrollX();
         int targetScrollX = scrollOffsetCalculator.calculateScrollOffset(newPosition, 0);
-        Exposer.Animator animator = Exposer.animator();
+        Animator animator = TabAnimator.newInstance();
         animator.setDuration(150);
         animator.setUpdateListener(updateListener);
         animator.setIntValues(startScrollX, targetScrollX);
         animator.start();
     }
 
-    private final Exposer.Animator.UpdateListener updateListener = new Exposer.Animator.UpdateListener() {
+    private final Animator.UpdateListener updateListener = new Animator.UpdateListener() {
         @Override
-        public void onUpdate(Exposer.Animator animator) {
+        public void onUpdate(Animator animator) {
             scrollable.scrollTo(animator.getAnimatedIntValue());
         }
     };
