@@ -5,7 +5,7 @@ import com.novoda.landingstrip.animation.TabAnimator;
 
 class FastForwarder {
 
-    static final int BYPASS_FAST_FOWARD = -1;
+    static final int BYPASS_FAST_FORWARD = -1;
 
     private final State state;
     private final Scrollable scrollable;
@@ -20,7 +20,7 @@ class FastForwarder {
     }
 
     boolean shouldHandleFastForward() {
-        return state.getFastForwardPosition() != BYPASS_FAST_FOWARD;
+        return state.getFastForwardPosition() != BYPASS_FAST_FORWARD;
     }
 
     boolean isIdle() {
@@ -56,7 +56,7 @@ class FastForwarder {
 
     void reset() {
         fastForwarding = false;
-        state.updateFastForwardPosition(BYPASS_FAST_FOWARD);
+        state.updateFastForwardPosition(BYPASS_FAST_FORWARD);
     }
 
 }
