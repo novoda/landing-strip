@@ -27,7 +27,6 @@ public class TabAnimator implements Animator {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 updateListener.onUpdate(new TabAnimator(animation));
-
             }
         });
     }
