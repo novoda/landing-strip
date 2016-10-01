@@ -2,17 +2,16 @@ package com.novoda.landingstrip;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-
+import android.support.v7.app.AppCompatActivity;
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.view.DemoViewPagerAdapter;
 
-public class NoFragmentsSimpleTextTabActivity extends ActionBarActivity {
+public class NoFragmentsSimpleTextTabActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(NoFragmentsSimpleTextTabActivity.class.getSimpleName());
+        setTitle("Demo: " + getClass().getSimpleName());
 
         setContentView(R.layout.activity_basic_usage);
 
