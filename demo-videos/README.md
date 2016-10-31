@@ -1,17 +1,34 @@
 
 # Demo video for each demo activity
 
-![CustomLandingStrip](/demo-videos/CustomLandingStrip.gif?raw=true)
+##### Demo for application '
 
-![CustomTabActivity](/demo-videos/CustomTabActivity.gif?raw=true)
+![Demo for application 'Custom Landing Strip'](/demo-videos/CustomLandingStrip.gif?raw=true)
 
-![FixedWithTabActivity](/demo-videos/FixedWithTabActivity.gif?raw=true)
 
-![MultipleListenersActivity](/demo-videos/MultipleListenersActivity.gif?raw=true)
+##### Demo for application 'Custom Tab Activity'
 
-![NoFragmentsSimpleTextActivity](/demo-videos/NoFragmentsSimpleTextActivity.gif?raw=true)
+![Demo for application 'CustomTabActivity](/demo-videos/CustomTabActivity.gif?raw=true)
 
-![SimpleTextTabActivity](/demo-videos/SimpleTextTabActivity.gif?raw=true)
+
+##### Demo for application 'Fixed With Tab Activity'
+
+![Demo for application 'Fixed With Tab Activity'](/demo-videos/FixedWithTabActivity.gif?raw=true)
+
+
+##### Demo for application 'Multiple Listeners Activity'
+
+![Demo for application 'Multiple Listeners Activity'](/demo-videos/MultipleListenersActivity.gif?raw=true)
+
+
+##### Demo for application 'No Fragments Simple Text Activity'
+
+![Demo for application 'No Fragments Simple Text Activity'](/demo-videos/NoFragmentsSimpleTextActivity.gif?raw=true)
+
+
+##### Demo for application 'Simple Text Tab Activity'
+
+![Demo for application 'Simple Text Tab Activity'](/demo-videos/SimpleTextTabActivity.gif?raw=true)
 
 
 ### How to create video
