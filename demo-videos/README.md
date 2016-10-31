@@ -1,7 +1,7 @@
 
 # Demo video for each demo activity
 
-##### Demo for application '
+##### Demo for application 'Custom Landing Strip'
 
 ![Demo for application 'Custom Landing Strip'](/demo-videos/CustomLandingStrip.gif?raw=true)
 
