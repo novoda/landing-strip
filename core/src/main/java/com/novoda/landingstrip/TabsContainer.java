@@ -1,34 +1,20 @@
 package com.novoda.landingstrip;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 class TabsContainer {
 
     private final LinearLayout tabsContainerView;
 
-    static TabsContainer newInstance(Context context, Attributes attributes) {
-        LinearLayout tabsContainerView = new LinearLayout(context);
-        tabsContainerView.setOrientation(LinearLayout.HORIZONTAL);
-        tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
-
-        return new TabsContainer(tabsContainerView);
-    }
-
     TabsContainer(LinearLayout tabsContainerView) {
         this.tabsContainerView = tabsContainerView;
-    }
-
-    void attachTo(ViewGroup parent) {
-        parent.addView(tabsContainerView, new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
     void clearTabs() {
@@ -107,5 +93,9 @@ class TabsContainer {
     @SuppressWarnings("deprecation")
     private void removeOnGlobalLayoutListenerLegacy(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener victim) {
         observer.removeGlobalOnLayoutListener(victim);
+    }
+
+    ViewGroup getContainer() {
+        return tabsContainerView;
     }
 }

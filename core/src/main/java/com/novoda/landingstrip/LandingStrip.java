@@ -9,12 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
-public class LandingStrip extends HorizontalScrollView implements Scrollable {
-
-    private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
+public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
 
     private final Attributes attributes;
     private final LayoutInflater layoutInflater;
@@ -22,12 +21,13 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     private final State state;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
     private final PagerAdapterObserver pagerAdapterObserver;
-    private final TabsContainer tabsContainer;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final FastForwarder fastForwarder;
 
-    private ViewPager viewPager;
-    private TabSetterUpper tabSetterUpper;
+    private TabsContainer tabsContainer;
+    private OnTabClickListener onTabClickListener;
+    private ScrollingPageChangeListener scrollingPageChangeListener;
+    private TabAdapter tabAdapter;
     private OnPageChangedListenerCollection onPageChangeListenerCollection;
 
     public LandingStrip(Context context, AttributeSet attrs) {
@@ -42,7 +42,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.indicatorPaint = new Paint();
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.pagerAdapterObserver = new PagerAdapterObserver(onPagerAdapterChangedListener);
-        this.tabsContainer = TabsContainer.newInstance(context, attributes);
         this.scrollOffsetCalculator = new ScrollOffsetCalculator(tabsContainer);
         this.fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
 
@@ -54,44 +53,88 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         indicatorPaint.setAntiAlias(true);
         indicatorPaint.setStyle(Paint.Style.FILL);
         indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColor()));
+    }
 
-        tabsContainer.attachTo(this);
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        View.inflate(getContext(), R.layout.merge_landing_strip, this);
+        LinearLayout tabsContainerView = (LinearLayout) findViewById(R.id.landing_strip__container);
+        tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
+        tabsContainer = new TabsContainer(tabsContainerView);
+        scrollingPageChangeListener = new ScrollingPageChangeListener(
+                state,
+                tabsContainer,
+                scrollOffsetCalculator,
+                this,
+                fastForwarder
+        );
     }
 
     private final OnPagerAdapterChangedListener onPagerAdapterChangedListener = new OnPagerAdapterChangedListener() {
         @Override
         public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
-            notifyDataSetChanged(pagerAdapter);
+            rebindAllTabs();
         }
     };
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        scrollingPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        scrollingPageChangeListener.onPageSelected(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        scrollingPageChangeListener.onPageScrollStateChanged(state);
+    }
+
+    public interface TabAdapter {
+
+        View getView(int position, ViewGroup parent);
+
+        int getCount();
+
+    }
+
+    public void setAdapter(TabAdapter tabAdapter, OnTabClickListener onTabClickListener) {
+        this.onTabClickListener = onTabClickListener;
+        this.tabAdapter = tabAdapter;
+        rebindAllTabs();
+        // TODO: bind dataset observer
+    }
+
+    void rebindAllTabs() {
+        tabsContainer.clearTabs();
+        if (tabAdapter == null) {
+            return;
+        }
+
+        for (int i = 0; i < tabAdapter.getCount(); i++) {
+            View tab = tabAdapter.getView(i, tabsContainer.getContainer());
+            final int position = i;
+            tab.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (notAlreadyAt(position)) {
+                        state.updateFastForwardPosition(position);
+                        forceDrawIndicatorAtPosition(position);
+                    }
+                    onTabClickListener.onTabClicked(position);
+                }
+            });
+            tabsContainer.addTab(tab, position);
+        }
+    }
+
+    // pagerAdapter.register(foo);
 
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         onPageChangeListenerCollection.add(onPageChangeListener);
-    }
-
-    public void attach(ViewPager viewPager) {
-        attach(viewPager, viewPager.getAdapter());
-    }
-
-    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB_SETTER_UPPER);
-    }
-
-    private static final TabSetterUpper SIMPLE_TEXT_TAB_SETTER_UPPER = new TabSetterUpper() {
-        @Override
-        public View setUp(int position, CharSequence title, View inflatedTab) {
-            ((TextView) inflatedTab).setText(title);
-            inflatedTab.setFocusable(true);
-            return inflatedTab;
-        }
-    };
-
-    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
-        this.viewPager = viewPager;
-        this.tabSetterUpper = tabSetterUpper;
-
-        pagerAdapterObserver.registerTo(pagerAdapter);
-        pagerAdapterObserver.onChanged();
     }
 
     @Override
@@ -143,38 +186,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         super.onDetachedFromWindow();
     }
 
-    private void notifyDataSetChanged(PagerAdapter pagerAdapter) {
-        tabsContainer.clearTabs();
-        int tabCount = pagerAdapter.getCount();
-        for (int position = 0; position < tabCount; position++) {
-            CharSequence title = pagerAdapter.getPageTitle(position);
-            View inflatedTabView = tabsContainer.inflateTab(layoutInflater, attributes.getTabLayoutId());
-            addTab(position, title, inflatedTabView, tabSetterUpper);
-        }
-        ScrollingPageChangeListener scrollingPageChangeListener = new ScrollingPageChangeListener(state, tabsContainer,
-                scrollOffsetCalculator, this, fastForwarder, onPageChangeListenerCollection);
-        tabsContainer.startWatching(viewPager, scrollingPageChangeListener);
-    }
-
-    private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
-        tabView = tabSetterUpper.setUp(position, title, tabView);
-        tabsContainer.addTab(tabView, position);
-        tabView.setOnClickListener(onTabClick);
-        tabView.setTag(TAG_KEY_POSITION, position);
-    }
-
-    private final OnClickListener onTabClick = new OnClickListener() {
-        @Override
-        public void onClick(@NonNull View view) {
-            int position = (int) view.getTag(TAG_KEY_POSITION);
-            if (notAlreadyAt(position)) {
-                state.updateFastForwardPosition(position);
-                forceDrawIndicatorAtPosition(position);
-            }
-            viewPager.setCurrentItem(position);
-        }
-    };
-
     private boolean notAlreadyAt(int position) {
         return position != state.getPosition();
     }
@@ -185,8 +196,8 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         invalidate();
     }
 
-    public interface TabSetterUpper {
-        View setUp(int position, CharSequence title, View inflatedTab);
+    public interface OnTabClickListener {
+        void onTabClicked(int position);
     }
 
 }
