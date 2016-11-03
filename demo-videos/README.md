@@ -30,13 +30,3 @@
 
 ![Demo for application 'Simple Text Tab Activity'](/demo-videos/SimpleTextTabActivity.gif?raw=true)
 
-
-### How to create video
-
-1. run demo in aindroid emulator
-2. use screen capture tool, like e.g. Camtasia Studio (free version)
-3. convert to gif using ffmpeg
-
-```
-ffmpeg -i demo.avi  -r 12 -pix_fmt rgb24 demo.gif
-```
