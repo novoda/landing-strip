@@ -2,17 +2,17 @@ package com.novoda.landingstrip;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-
+import android.support.v7.app.AppCompatActivity;
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
-public class CustomLandingStrip extends ActionBarActivity {
+public class CustomLandingStrip extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_landing_strip);
+        setTitle("Demo: " + getClass().getSimpleName());
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);

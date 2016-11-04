@@ -8,6 +8,13 @@ This is a tab strip born from other tabs strips, the key difference it **YOU** t
 The client will provide the layout to inflate, handling the view updating, the different selection states.
 
 
+## Demo
+
+![FixedWithTabActivity](/demo-videos/FixedWithTabActivity.gif?raw=true)
+
+[more demos ...](/demo-videos/README.md)
+
+
 ## Adding to your project
 
 To start using this library, add these lines to the `build.gradle` of your project:
@@ -56,7 +63,6 @@ landingStrip.setViewPager(viewPager, viewPager.getAdapter());
 ```
 
 More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/landing-strip/wiki).
-
 
 
 ## Links
