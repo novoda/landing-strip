@@ -30,8 +30,8 @@ public class CustomTabActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         landingStrip.detach();
+        super.onDestroy();
     }
 
     private final LandingStrip.TabSetterUpper customTabs = new LandingStrip.TabSetterUpper() {

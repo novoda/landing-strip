@@ -26,7 +26,7 @@ public class SimpleTextTabActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         landingStrip.detach();
+        super.onDestroy();
     }
 }

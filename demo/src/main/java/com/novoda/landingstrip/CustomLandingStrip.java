@@ -25,7 +25,7 @@ public class CustomLandingStrip extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         landingStrip.detach();
+        super.onDestroy();
     }
 }
