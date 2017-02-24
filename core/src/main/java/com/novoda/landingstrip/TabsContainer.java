@@ -47,7 +47,7 @@ class TabsContainer {
         return tabsContainerView.getChildCount() > 0;
     }
 
-    View getTabAt(final int position) {
+    View getTabAt(int position) {
         return tabsContainerView.getChildAt(position);
     }
 
