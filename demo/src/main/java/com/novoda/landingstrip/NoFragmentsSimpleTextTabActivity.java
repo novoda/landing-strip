@@ -8,6 +8,9 @@ import com.novoda.landingstrip.setup.view.DemoViewPagerAdapter;
 
 public class NoFragmentsSimpleTextTabActivity extends AppCompatActivity {
 
+    private LandingStrip landingStrip;
+    private ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,11 +18,15 @@ public class NoFragmentsSimpleTextTabActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_basic_usage);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoViewPagerAdapter(getLayoutInflater()));
 
-        LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
+        landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         landingStrip.attach(viewPager);
     }
 
+    @Override
+    protected void onDestroy() {
+        landingStrip.detach(viewPager);
+    }
 }

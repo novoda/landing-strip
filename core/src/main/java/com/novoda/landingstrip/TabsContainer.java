@@ -47,7 +47,7 @@ class TabsContainer {
         return tabsContainerView.getChildCount() > 0;
     }
 
-    View getTabAt(int position) {
+    View getTabAt(final int position) {
         return tabsContainerView.getChildAt(position);
     }
 
@@ -57,18 +57,13 @@ class TabsContainer {
 
     void startWatching(final ViewPager viewPager, final ViewPager.OnPageChangeListener onPageChangeListener) {
         if (hasTabs()) {
-            getTabAt(0).getViewTreeObserver().addOnGlobalLayoutListener(
-                    new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            ViewTreeObserver observer = getTabAt(0).getViewTreeObserver();
-                            removeOnGlobalLayoutListener(observer, this);
-                            viewPager.addOnPageChangeListener(onPageChangeListener);
-
-                            onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0);
-                        }
-                    }
-            );
+            viewPager.addOnPageChangeListener(onPageChangeListener);
+            viewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0);
+                }
+            });
         }
     }
 
@@ -89,23 +84,5 @@ class TabsContainer {
 
     boolean hasTabAt(int position) {
         return getTabCount() - 1 >= position + 1;
-    }
-
-    private void removeOnGlobalLayoutListener(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener victim) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            removeOnGlobalLayoutListenerJellyBean(observer, victim);
-        } else {
-            removeOnGlobalLayoutListenerLegacy(observer, victim);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void removeOnGlobalLayoutListenerJellyBean(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener victim) {
-        observer.removeOnGlobalLayoutListener(victim);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void removeOnGlobalLayoutListenerLegacy(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener victim) {
-        observer.removeGlobalOnLayoutListener(victim);
     }
 }

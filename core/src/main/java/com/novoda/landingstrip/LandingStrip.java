@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
     private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
@@ -26,6 +29,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final FastForwarder fastForwarder;
 
+    private Set<ScrollingPageChangeListener> onScrollingPageChangeListeners;
     private ViewPager viewPager;
     private TabSetterUpper tabSetterUpper;
     private OnPageChangedListenerCollection onPageChangeListenerCollection;
@@ -41,13 +45,18 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.layoutInflater = LayoutInflater.from(context);
         this.indicatorPaint = new Paint();
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
-        this.pagerAdapterObserver = new PagerAdapterObserver(onPagerAdapterChangedListener);
+        this.pagerAdapterObserver = new PagerAdapterObserver(new OnPagerAdapterChangedListener() {
+                @Override
+                public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
+                    notifyDataSetChanged(pagerAdapter);
+                }
+            });
         this.tabsContainer = TabsContainer.newInstance(context, attributes);
         this.scrollOffsetCalculator = new ScrollOffsetCalculator(tabsContainer);
         this.fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
 
         this.onPageChangeListenerCollection = OnPageChangedListenerCollection.newInstance();
-
+        this.onScrollingPageChangeListeners = new HashSet<>();
         state.updatePosition(0);
         state.updatePositionOffset(0);
 
@@ -57,13 +66,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
         tabsContainer.attachTo(this);
     }
-
-    private final OnPagerAdapterChangedListener onPagerAdapterChangedListener = new OnPagerAdapterChangedListener() {
-        @Override
-        public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
-            notifyDataSetChanged(pagerAdapter);
-        }
-    };
 
     public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         onPageChangeListenerCollection.add(onPageChangeListener);
@@ -153,7 +155,20 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         }
         ScrollingPageChangeListener scrollingPageChangeListener = new ScrollingPageChangeListener(state, tabsContainer,
                 scrollOffsetCalculator, this, fastForwarder, onPageChangeListenerCollection);
+        removeAllListenersFrom(viewPager);
+        trackAttachedListener(scrollingPageChangeListener);
         tabsContainer.startWatching(viewPager, scrollingPageChangeListener);
+    }
+
+    private void removeAllListenersFrom(ViewPager viewPager) {
+        for (ScrollingPageChangeListener listener : onScrollingPageChangeListeners) {
+            viewPager.removeOnPageChangeListener(listener);
+        }
+        onScrollingPageChangeListeners.clear();
+    }
+
+    private void trackAttachedListener(ScrollingPageChangeListener scrollingPageChangeListener) {
+        onScrollingPageChangeListeners.add(scrollingPageChangeListener);
     }
 
     private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
@@ -185,8 +200,11 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         invalidate();
     }
 
+    public void detach(ViewPager viewPager) {
+        removeAllListenersFrom(viewPager);
+    }
+
     public interface TabSetterUpper {
         View setUp(int position, CharSequence title, View inflatedTab);
     }
-
 }
