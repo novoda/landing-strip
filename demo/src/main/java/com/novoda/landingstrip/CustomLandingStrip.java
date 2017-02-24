@@ -8,17 +8,24 @@ import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
 public class CustomLandingStrip extends AppCompatActivity {
 
+    private LandingStrip landingStrip;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_landing_strip);
         setTitle("Demo: " + getClass().getSimpleName());
 
-        LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
+        landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
 
         landingStrip.attach(viewPager, viewPager.getAdapter());
     }
 
+    @Override
+    protected void onDestroy() {
+        landingStrip.detach();
+        super.onDestroy();
+    }
 }
