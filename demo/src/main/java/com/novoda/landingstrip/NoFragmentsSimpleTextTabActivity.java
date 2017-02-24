@@ -27,6 +27,6 @@ public class NoFragmentsSimpleTextTabActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        landingStrip.detach(viewPager);
+        landingStrip.detach();
     }
 }

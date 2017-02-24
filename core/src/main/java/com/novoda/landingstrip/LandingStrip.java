@@ -200,8 +200,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         invalidate();
     }
 
-    public void detach(ViewPager viewPager) {
-        removeAllListenersFrom(viewPager);
+    public void detach() {
+        if (viewPager != null) {
+            removeAllListenersFrom(viewPager);
+        }
     }
 
     public interface TabSetterUpper {
