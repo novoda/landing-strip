@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
@@ -28,7 +28,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     private final TabsContainer tabsContainer;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final FastForwarder fastForwarder;
-    private final Set<ScrollingPageChangeListener> scrollingPageChangeListeners;
+    private final List<ScrollingPageChangeListener> scrollingPageChangeListeners;
 
     private ViewPager viewPager;
     private TabSetterUpper tabSetterUpper;
@@ -56,7 +56,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
 
         this.onPageChangeListenerCollection = OnPageChangedListenerCollection.newInstance();
-        this.scrollingPageChangeListeners = new HashSet<>();
+        this.scrollingPageChangeListeners = new ArrayList<>();
         state.updatePosition(0);
         state.updatePositionOffset(0);
 
