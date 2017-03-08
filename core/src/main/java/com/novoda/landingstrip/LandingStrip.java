@@ -171,11 +171,15 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         scrollingPageChangeListeners.add(listener);
     }
 
-    private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
+    private void addTab(int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
         tabView = tabSetterUpper.setUp(position, title, tabView);
         tabsContainer.addTab(tabView, position);
         tabView.setOnClickListener(onTabClick);
         tabView.setTag(TAG_KEY_POSITION, position);
+    }
+
+    public View getTabAt(int position) {
+        return tabsContainer.getTabAt(position);
     }
 
     private final OnClickListener onTabClick = new OnClickListener() {
