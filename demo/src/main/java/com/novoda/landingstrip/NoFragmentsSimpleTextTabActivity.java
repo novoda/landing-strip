@@ -22,7 +22,6 @@ public class NoFragmentsSimpleTextTabActivity extends AppCompatActivity {
         viewPager.setAdapter(new DemoViewPagerAdapter(getLayoutInflater()));
 
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        landingStrip.attach(viewPager);
     }
 
     @Override

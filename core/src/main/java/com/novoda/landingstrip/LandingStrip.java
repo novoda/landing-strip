@@ -12,14 +12,11 @@ import android.widget.HorizontalScrollView;
 
 public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
 
-    private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
-
     private final Attributes attributes;
     private final Paint indicatorPaint;
     private final State state;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
-    private ViewPager viewPager;
     private TabsContainerView tabsContainerView;
     private ScrollingPageChangeListener scrollingPageChangeListener;
 
@@ -50,7 +47,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         ScrollOffsetCalculator scrollOffsetCalculator = new ScrollOffsetCalculator(this, tabsContainerView);
         FastForwarder fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
 
-        scrollingPageChangeListener = new ScrollingPageChangeListener(
+        this.scrollingPageChangeListener = new ScrollingPageChangeListener(
                 state,
                 tabsContainerView,
                 scrollOffsetCalculator,
@@ -75,27 +72,20 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
         for (int position = 0; position < adapter.getCount(); position++) {
             T view = adapter.createView(tabsContainerView, position);
-            adapter.bindView(view, position);
-
-            view.setOnClickListener(onTabClick);
-            view.setTag(TAG_KEY_POSITION, position);
+            adapter.bindView(view, position, this);
             tabsContainerView.addView(view);
         }
     }
 
-    private final OnClickListener onTabClick = new OnClickListener() {
-        @Override
-        public void onClick(@NonNull View view) {
-            int position = (int) view.getTag(TAG_KEY_POSITION);
-            if (notAlreadyAt(position)) {
-                state.updateFastForwardPosition(position);
-                forceDrawIndicatorAtPosition(position);
-            }
-            viewPager.setCurrentItem(position);
+    public void moveToPosition(int position) {
+        if (alreadyAt(position)) {
+            return;
         }
-    };
+        state.updateFastForwardPosition(position);
+        forceDrawIndicatorAtPosition(position);
+    }
 
-    private boolean notAlreadyAt(int position) {
+    private boolean alreadyAt(int position) {
         return position != state.getPosition();
     }
 
@@ -103,10 +93,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         state.updatePosition(position);
         state.updatePositionOffset(0);
         invalidate();
-    }
-
-    public void attach(ViewPager viewPager) {
-        this.viewPager = viewPager; // TODO: we want to remove this, and create a simple adapter that uses this to do the click tab to set page
     }
 
     @Override
@@ -176,7 +162,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
         protected abstract T createView(ViewGroup parent, int position);
 
-        protected abstract void bindView(T view, int position);
+        protected abstract void bindView(T view, int position, LandingStrip landingStrip);
 
         void setListener(Listener<T> listener) {
             this.listener = listener;

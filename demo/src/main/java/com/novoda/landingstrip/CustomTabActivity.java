@@ -29,7 +29,6 @@ public class CustomTabActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(landingStrip);
 
-        landingStrip.attach(viewPager);
         landingStrip.setAdapter(new LandingStrip.Adapter<View>() {
             @Override
             protected View createView(ViewGroup parent, int position) {
@@ -37,7 +36,7 @@ public class CustomTabActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void bindView(View view, int position) {
+            protected void bindView(View view, int position, LandingStrip landingStrip) {
                 ((TextView) view.findViewById(R.id.tab_2_title)).setText("" + position);
                 ((ImageView) view.findViewById(R.id.tab_2_content)).setImageResource(Data.values()[position].getResId());
             }

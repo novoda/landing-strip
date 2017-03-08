@@ -20,8 +20,6 @@ public class CustomLandingStrip extends AppCompatActivity {
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
-
-        landingStrip.attach(viewPager);
     }
 
     @Override

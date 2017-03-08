@@ -23,7 +23,7 @@ public class SimpleTextTabActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
 
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        landingStrip.setAdapter(new TabAdapter(pagerAdapter, LayoutInflater.from(this)));
+        landingStrip.setAdapter(new TabAdapter(pagerAdapter, LayoutInflater.from(this), viewPager));
 
         viewPager.addOnPageChangeListener(landingStrip);
     }
