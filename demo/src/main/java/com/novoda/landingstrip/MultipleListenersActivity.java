@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
@@ -22,7 +23,7 @@ public class MultipleListenersActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(com.novoda.landing_strip.R.id.view_pager);
         viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
 
-        landingStrip.attach(viewPager, viewPager.getAdapter());
+        landingStrip.attach(viewPager);
     }
 
     private final ViewPager.OnPageChangeListener firstOnPageChangedListener = new ViewPager.OnPageChangeListener() {

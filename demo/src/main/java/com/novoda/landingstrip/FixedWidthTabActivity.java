@@ -21,7 +21,7 @@ public class FixedWidthTabActivity extends AppCompatActivity {
         viewPager.setAdapter(new SmallDemoFragmentPagerAdapter(getSupportFragmentManager()));
 
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        landingStrip.attach(viewPager, viewPager.getAdapter());
+        landingStrip.attach(viewPager);
     }
 
     @Override

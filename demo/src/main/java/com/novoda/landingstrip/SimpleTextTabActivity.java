@@ -21,7 +21,7 @@ public class SimpleTextTabActivity extends AppCompatActivity {
         viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
 
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        landingStrip.attach(viewPager, viewPager.getAdapter());
+        landingStrip.attach(viewPager);
     }
 
     @Override

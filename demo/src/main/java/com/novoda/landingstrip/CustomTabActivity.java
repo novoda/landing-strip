@@ -29,7 +29,7 @@ public class CustomTabActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(landingStrip);
 
-        landingStrip.attach(viewPager, null, null);
+        landingStrip.attach(viewPager);
         landingStrip.setAdapter(new LandingStrip.Adapter<View>() {
             @Override
             protected View createView(ViewGroup parent, int position) {
@@ -48,15 +48,5 @@ public class CustomTabActivity extends AppCompatActivity {
             }
         });
     }
-
-    private final LandingStrip.TabSetterUpper customTabs = new LandingStrip.TabSetterUpper() {
-        @Override
-        public View setUp(int position, CharSequence title, View inflatedTab) {
-            ((TextView) inflatedTab.findViewById(R.id.tab_2_title)).setText("" + position);
-            ((ImageView) inflatedTab.findViewById(R.id.tab_2_content)).setImageResource(Data.values()[position].getResId());
-
-            return inflatedTab;
-        }
-    };
 
 }

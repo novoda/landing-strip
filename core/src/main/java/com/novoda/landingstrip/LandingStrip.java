@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.TextView;
 
 public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
 
@@ -102,23 +100,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     }
 
     public void attach(ViewPager viewPager) {
-        attach(viewPager, viewPager.getAdapter());
-    }
-
-    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB_SETTER_UPPER);
-    }
-
-    private static final TabSetterUpper SIMPLE_TEXT_TAB_SETTER_UPPER = new TabSetterUpper() {
-        @Override
-        public View setUp(int position, CharSequence title, View inflatedTab) {
-            ((TextView) inflatedTab).setText(title);
-            inflatedTab.setFocusable(true);
-            return inflatedTab;
-        }
-    };
-
-    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager; // TODO: we want to remove this, and create a simple adapter that uses this to do the click tab to set page
     }
 
@@ -186,10 +167,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     public void detach() {
         // no op
-    }
-
-    public interface TabSetterUpper {
-        View setUp(int position, CharSequence title, View inflatedTab);
     }
 
     public abstract static class Adapter<T extends View> {
