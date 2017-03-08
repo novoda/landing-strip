@@ -95,10 +95,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         }
     };
 
-    public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        // no op - use the one on the ViewPager
-    }
-
     public void attach(ViewPager viewPager) {
         this.viewPager = viewPager; // TODO: we want to remove this, and create a simple adapter that uses this to do the click tab to set page
     }

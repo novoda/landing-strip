@@ -16,9 +16,9 @@ public class MultipleListenersActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_multiple_listeners);
 
+        // TODO remove this demo activity, there's no longer a benefit
+
         LandingStrip landingStrip = (LandingStrip) findViewById(com.novoda.landing_strip.R.id.landing_strip);
-        landingStrip.addOnPageChangeListener(firstOnPageChangedListener);
-        landingStrip.addOnPageChangeListener(secondOnPageChangedListener);
 
         ViewPager viewPager = (ViewPager) findViewById(com.novoda.landing_strip.R.id.view_pager);
         viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
