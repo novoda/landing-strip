@@ -5,22 +5,23 @@ import android.support.v4.view.ViewPager;
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private final State state;
-    private final TabsContainer tabsContainer;
+    private final TabsContainerView tabsContainerView;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final Scrollable scrollable;
     private final FastForwarder fastForwarder;
-    private final OnPageChangedListenerCollection onPageChangedListenerCollection;
 
     private boolean firstTimeAccessed = true;
 
-    ScrollingPageChangeListener(State state, TabsContainer tabsContainer, ScrollOffsetCalculator scrollOffsetCalculator,
-                                Scrollable scrollable, FastForwarder fastForwarder, OnPageChangedListenerCollection onPageChangedListenerCollection) {
+    ScrollingPageChangeListener(State state,
+                                TabsContainerView tabsContainerView,
+                                ScrollOffsetCalculator scrollOffsetCalculator,
+                                Scrollable scrollable,
+                                FastForwarder fastForwarder) {
         this.state = state;
-        this.tabsContainer = tabsContainer;
+        this.tabsContainerView = tabsContainerView;
         this.scrollOffsetCalculator = scrollOffsetCalculator;
         this.scrollable = scrollable;
         this.fastForwarder = fastForwarder;
-        this.onPageChangedListenerCollection = onPageChangedListenerCollection;
     }
 
     @Override
@@ -32,13 +33,11 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
         } else {
             scroll(position, positionOffset);
         }
-
-        onPageChangedListenerCollection.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
         if (firstTimeAccessed) {
-            tabsContainer.setActivated(position);
+            tabsContainerView.setActivated(position);
             firstTimeAccessed = false;
         }
     }
@@ -65,13 +64,12 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     @Override
     public void onPageSelected(int position) {
-        tabsContainer.setActivated(position);
-        onPageChangedListenerCollection.onPageSelected(position);
+        tabsContainerView.setActivated(position);
     }
 
     @Override
     public void onPageScrollStateChanged(int changedState) {
-        onPageChangedListenerCollection.onPageScrollStateChanged(changedState);
+        // no op
     }
 
 }

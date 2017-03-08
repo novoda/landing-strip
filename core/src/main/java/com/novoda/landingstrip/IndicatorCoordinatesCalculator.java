@@ -22,8 +22,8 @@ class IndicatorCoordinatesCalculator {
         this.movingIndicatorCoordinates = movingIndicatorCoordinates;
     }
 
-    Coordinates calculate(int currentPosition, float pagePositionOffset, TabsContainer tabsContainer) {
-        View currentTab = tabsContainer.getTabAt(currentPosition);
+    Coordinates calculate(int currentPosition, float pagePositionOffset, TabsContainerView tabsContainer) {
+        View currentTab = tabsContainer.getChildAt(currentPosition);
 
         float currentTabStart = currentTab.getLeft();
         float currentTabEnd = currentTab.getRight();
@@ -31,8 +31,8 @@ class IndicatorCoordinatesCalculator {
         currentTabCoordinates.setStart(currentTabStart);
         currentTabCoordinates.setEnd(currentTabEnd);
 
-        if (isScrolling(pagePositionOffset) && hasNextTab(currentPosition, tabsContainer.getTabCount())) {
-            View nextTab = tabsContainer.getTabAt(currentPosition + 1);
+        if (isScrolling(pagePositionOffset) && hasNextTab(currentPosition, tabsContainer.getChildCount())) {
+            View nextTab = tabsContainer.getChildAt(currentPosition + 1);
 
             nextTabCoordinates.setStart(nextTab.getLeft());
             nextTabCoordinates.setEnd(nextTab.getRight());
