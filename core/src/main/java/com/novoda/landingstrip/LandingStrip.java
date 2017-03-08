@@ -209,4 +209,31 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     public interface TabSetterUpper {
         View setUp(int position, CharSequence title, View inflatedTab);
     }
+
+    public abstract static class Adapter<T extends View> {
+
+        private Listener listener;
+
+        protected abstract T createView(ViewGroup parent, int position);
+
+        protected abstract void bindView(T view, int position);
+
+        void setListener(Listener listener) {
+            this.listener = listener;
+        }
+
+        protected void notifyDataSetChanged() {
+            if (listener != null) {
+                listener.onNotifyDataSetChanged();
+            }
+        }
+
+        protected abstract int getCount();
+
+        interface Listener {
+
+            void onNotifyDataSetChanged();
+
+        }
+    }
 }
