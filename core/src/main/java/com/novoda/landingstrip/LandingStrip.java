@@ -95,6 +95,16 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         }
     };
 
+    private boolean notAlreadyAt(int position) {
+        return position != state.getPosition();
+    }
+
+    private void forceDrawIndicatorAtPosition(int position) {
+        state.updatePosition(position);
+        state.updatePositionOffset(0);
+        invalidate();
+    }
+
     public void attach(ViewPager viewPager) {
         this.viewPager = viewPager; // TODO: we want to remove this, and create a simple adapter that uses this to do the click tab to set page
     }
@@ -133,16 +143,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     @Override
     public void scrollTo(int x, int y) {
         super.scrollTo(x, y);
-        invalidate();
-    }
-
-    private boolean notAlreadyAt(int position) {
-        return position != state.getPosition();
-    }
-
-    private void forceDrawIndicatorAtPosition(int position) {
-        state.updatePosition(position);
-        state.updatePositionOffset(0);
         invalidate();
     }
 
