@@ -3,6 +3,7 @@ package com.novoda.landingstrip;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
@@ -18,10 +19,13 @@ public class SimpleTextTabActivity extends AppCompatActivity {
         setTitle("Demo: " + getClass().getSimpleName());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
+        DemoFragmentPagerAdapter pagerAdapter = new DemoFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
 
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        landingStrip.attach(viewPager);
+        landingStrip.setAdapter(new TabAdapter(pagerAdapter, LayoutInflater.from(this)));
+
+        viewPager.addOnPageChangeListener(landingStrip);
     }
 
     @Override
