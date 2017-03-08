@@ -116,7 +116,12 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
             return;
         }
 
-        drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state.getPosition(), state.getPagePositionOffset(), tabsContainerView));
+        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculate(
+                state.getPosition(),
+                state.getPagePositionOffset(),
+                tabsContainerView
+        );
+        drawIndicator(canvas, indicatorCoordinates);
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
