@@ -212,27 +212,27 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
     public abstract static class Adapter<T extends View> {
 
-        private Listener listener;
+        private Listener<T> listener;
 
         protected abstract T createView(ViewGroup parent, int position);
 
         protected abstract void bindView(T view, int position);
 
-        void setListener(Listener listener) {
+        void setListener(Listener<T> listener) {
             this.listener = listener;
         }
 
         protected void notifyDataSetChanged() {
             if (listener != null) {
-                listener.onNotifyDataSetChanged();
+                listener.onNotifyDataSetChanged(this);
             }
         }
 
         protected abstract int getCount();
 
-        interface Listener {
+        interface Listener<T extends View> {
 
-            void onNotifyDataSetChanged();
+            void onNotifyDataSetChanged(Adapter<T> adapter);
 
         }
     }
