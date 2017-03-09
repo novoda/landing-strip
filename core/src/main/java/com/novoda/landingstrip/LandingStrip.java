@@ -168,7 +168,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
             this.listener = listener;
         }
 
-        protected void notifyDataSetChanged() {
+        public void notifyDataSetChanged() {
             if (listener != null) {
                 listener.onNotifyDataSetChanged(this);
             }
