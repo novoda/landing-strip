@@ -1,13 +1,10 @@
 package com.novoda.landingstrip;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -55,15 +52,10 @@ class TabsContainer {
         return !hasTabs();
     }
 
-    void startWatching(final ViewPager viewPager, final ViewPager.OnPageChangeListener onPageChangeListener) {
+    void scrollToCurrentItem(final ViewPager viewPager, final ViewPager.OnPageChangeListener onPageChangeListener) {
         if (hasTabs()) {
             viewPager.addOnPageChangeListener(onPageChangeListener);
-            viewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0);
-                }
-            });
+            onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0);
         }
     }
 
@@ -83,6 +75,6 @@ class TabsContainer {
     }
 
     boolean hasTabAt(int position) {
-        return getTabCount() - 1 >= position + 1;
+        return position < getTabCount();
     }
 }
