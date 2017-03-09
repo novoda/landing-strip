@@ -46,11 +46,11 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.indicatorPaint = new Paint();
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.pagerAdapterObserver = new PagerAdapterObserver(new OnPagerAdapterChangedListener() {
-                @Override
-                public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
-                    notifyDataSetChanged(pagerAdapter);
-                }
-            });
+            @Override
+            public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
+                notifyDataSetChanged(pagerAdapter);
+            }
+        });
         this.tabsContainer = TabsContainer.newInstance(context, attributes);
         this.scrollOffsetCalculator = new ScrollOffsetCalculator(tabsContainer);
         this.fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
@@ -157,7 +157,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
                 scrollOffsetCalculator, this, fastForwarder, onPageChangeListenerCollection);
         removeAllListenersFrom(viewPager);
         trackAttachedListener(scrollingPageChangeListener);
-        tabsContainer.startWatching(viewPager, scrollingPageChangeListener);
+        tabsContainer.scrollToCurrentItem(viewPager, scrollingPageChangeListener);
     }
 
     private void removeAllListenersFrom(ViewPager viewPager) {
