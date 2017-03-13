@@ -21,11 +21,18 @@ public abstract class LandingStripAdapter<T extends View> {
         }
     }
 
+    public void notifyItemChanged(int position) {
+        if (listener != null) {
+            listener.onNotifyItemChanged(this, position);
+        }
+    }
+
     protected abstract int getCount();
 
     interface Listener {
 
         <T extends View> void onNotifyDataSetChanged(LandingStripAdapter<T> adapter);
 
+        <T extends View> void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position);
     }
 }

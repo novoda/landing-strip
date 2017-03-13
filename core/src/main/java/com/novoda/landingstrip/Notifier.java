@@ -25,4 +25,10 @@ class Notifier implements LandingStripAdapter.Listener {
         }
     }
 
+    @Override
+    public <T extends View> void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position) {
+        View tabView = tabsContainerView.getChildAt(position);
+        adapter.bindView((T) tabView, position);
+    }
+
 }
