@@ -63,7 +63,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         adapter.notifyDataSetChanged();
     }
 
-    public void moveToPosition(int position) {
+    public void setCurrentItem(int position) {
         if (alreadyAt(position)) {
             return;
         }

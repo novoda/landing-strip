@@ -35,7 +35,7 @@ public class TabAdapter extends LandingStripAdapter<TextView> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                landingStrip.moveToPosition(position);
+                landingStrip.setCurrentItem(position);
                 viewPager.setCurrentItem(position);
             }
         });

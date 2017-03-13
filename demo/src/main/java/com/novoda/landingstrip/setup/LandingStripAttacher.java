@@ -74,7 +74,7 @@ public class LandingStripAttacher {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    landingStrip.moveToPosition(position);
+                    landingStrip.setCurrentItem(position);
                     viewPager.setCurrentItem(position);
                 }
             });
