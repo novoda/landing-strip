@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 
 public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
@@ -19,6 +18,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     private TabsContainerView tabsContainerView;
     private ScrollingPageChangeListener scrollingPageChangeListener;
+    private Notifier notifier;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,27 +54,13 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
                 this,
                 fastForwarder
         );
+
+        notifier = new Notifier(tabsContainerView);
     }
 
-    public <T extends View> void setAdapter(Adapter<T> adapter) {
-        adapter.setListener(new Adapter.Listener<T>() {
-            @Override
-            public void onNotifyDataSetChanged(Adapter<T> adapter) {
-                createAndBindTabs(adapter);
-            }
-        });
-
-        createAndBindTabs(adapter);
-    }
-
-    private <T extends View> void createAndBindTabs(Adapter<T> adapter) {
-        tabsContainerView.removeAllViews();
-
-        for (int position = 0; position < adapter.getCount(); position++) {
-            T view = adapter.createView(tabsContainerView, position);
-            adapter.bindView(view, position, this);
-            tabsContainerView.addView(view);
-        }
+    public <T extends View> void setAdapter(LandingStripAdapter<T> adapter) {
+        adapter.setListener(notifier);
+        adapter.notifyDataSetChanged();
     }
 
     public void moveToPosition(int position) {
@@ -108,10 +94,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     protected Coordinates calculateIndicatorCoordinates(ReadOnlyState state) {
         return indicatorCoordinatesCalculator.calculate(
-                    state.position(),
-                    state.offset(),
-                    tabsContainerView
-            );
+                state.position(),
+                state.offset(),
+                tabsContainerView
+        );
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
@@ -160,30 +146,4 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         // no op
     }
 
-    public abstract static class Adapter<T extends View> {
-
-        private Listener<T> listener;
-
-        protected abstract T createView(ViewGroup parent, int position);
-
-        protected abstract void bindView(T view, int position, LandingStrip landingStrip);
-
-        void setListener(Listener<T> listener) {
-            this.listener = listener;
-        }
-
-        public void notifyDataSetChanged() {
-            if (listener != null) {
-                listener.onNotifyDataSetChanged(this);
-            }
-        }
-
-        protected abstract int getCount();
-
-        interface Listener<T extends View> {
-
-            void onNotifyDataSetChanged(Adapter<T> adapter);
-
-        }
-    }
 }

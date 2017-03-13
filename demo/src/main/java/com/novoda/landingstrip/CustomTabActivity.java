@@ -29,14 +29,14 @@ public class CustomTabActivity extends AppCompatActivity {
 
         viewPager.addOnPageChangeListener(landingStrip);
 
-        landingStrip.setAdapter(new LandingStrip.Adapter<View>() {
+        landingStrip.setAdapter(new LandingStripAdapter<View>() {
             @Override
             protected View createView(ViewGroup parent, int position) {
                 return getLayoutInflater().inflate(R.layout.tab_custom, parent, false);
             }
 
             @Override
-            protected void bindView(View view, int position, LandingStrip landingStrip) {
+            protected void bindView(View view, int position) {
                 ((TextView) view.findViewById(R.id.tab_2_title)).setText("" + position);
                 ((ImageView) view.findViewById(R.id.tab_2_content)).setImageResource(Data.values()[position].getResId());
             }

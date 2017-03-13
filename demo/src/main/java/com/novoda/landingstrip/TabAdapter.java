@@ -9,16 +9,18 @@ import android.widget.TextView;
 
 import com.novoda.landing_strip.R;
 
-public class TabAdapter extends LandingStrip.Adapter<TextView> {
+public class TabAdapter extends LandingStripAdapter<TextView> {
 
     private final PagerAdapter pagerAdapter;
     private final LayoutInflater layoutInflater;
     private final ViewPager viewPager;
+    private final LandingStrip landingStrip;
 
-    public TabAdapter(PagerAdapter pagerAdapter, LayoutInflater layoutInflater, ViewPager viewPager) {
+    public TabAdapter(PagerAdapter pagerAdapter, LayoutInflater layoutInflater, ViewPager viewPager, LandingStrip landingStrip) {
         this.pagerAdapter = pagerAdapter;
         this.layoutInflater = layoutInflater;
         this.viewPager = viewPager;
+        this.landingStrip = landingStrip;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class TabAdapter extends LandingStrip.Adapter<TextView> {
     }
 
     @Override
-    protected void bindView(final TextView view, final int position, final LandingStrip landingStrip) {
+    protected void bindView(final TextView view, final int position) {
         CharSequence pageTitle = pagerAdapter.getPageTitle(position);
         view.setText(pageTitle);
         view.setOnClickListener(new View.OnClickListener() {

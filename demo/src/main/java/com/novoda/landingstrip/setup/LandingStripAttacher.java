@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.novoda.landing_strip.R;
+import com.novoda.landingstrip.LandingStripAdapter;
 import com.novoda.landingstrip.LandingStrip;
 
 public class LandingStripAttacher {
@@ -27,7 +28,7 @@ public class LandingStripAttacher {
         viewPager.addOnPageChangeListener(landingStrip);
 
         PagerAdapter pagerAdapter = viewPager.getAdapter();
-        final SimpleTabAdapter tabAdapter = new SimpleTabAdapter(pagerAdapter, layoutInflater, viewPager);
+        final SimpleTabAdapter tabAdapter = new SimpleTabAdapter(pagerAdapter, layoutInflater, viewPager, landingStrip);
 
         dataSetObserver = new DataSetObserver() {
             @Override
@@ -47,16 +48,18 @@ public class LandingStripAttacher {
         viewPager.getAdapter().unregisterDataSetObserver(dataSetObserver);
     }
 
-    private static class SimpleTabAdapter extends LandingStrip.Adapter<TextView> {
+    private static class SimpleTabAdapter extends LandingStripAdapter<TextView> {
 
         private final PagerAdapter pagerAdapter;
         private final LayoutInflater layoutInflater;
         private final ViewPager viewPager;
+        private final LandingStrip landingStrip;
 
-        SimpleTabAdapter(PagerAdapter pagerAdapter, LayoutInflater layoutInflater, ViewPager viewPager) {
+        SimpleTabAdapter(PagerAdapter pagerAdapter, LayoutInflater layoutInflater, ViewPager viewPager, LandingStrip landingStrip) {
             this.pagerAdapter = pagerAdapter;
             this.layoutInflater = layoutInflater;
             this.viewPager = viewPager;
+            this.landingStrip = landingStrip;
         }
 
         @Override
@@ -65,7 +68,7 @@ public class LandingStripAttacher {
         }
 
         @Override
-        protected void bindView(final TextView view, final int position, final LandingStrip landingStrip) {
+        protected void bindView(final TextView view, final int position) {
             CharSequence pageTitle = pagerAdapter.getPageTitle(position);
             view.setText(pageTitle);
             view.setOnClickListener(new View.OnClickListener() {
