@@ -48,7 +48,6 @@ class IndicatorCoordinatesCalculator {
 
     private boolean hasNextTab(int currentPosition, int childCount) {
         return currentPosition < childCount;
-
     }
 
     private Coordinates calculateMovingIndicatorCoordinates(float pagePositionOffset, Coordinates currentTab, Coordinates nextTab) {

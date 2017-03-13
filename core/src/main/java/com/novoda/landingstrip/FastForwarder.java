@@ -20,7 +20,7 @@ class FastForwarder {
     }
 
     boolean shouldHandleFastForward() {
-        return state.getFastForwardPosition() != BYPASS_FAST_FORWARD;
+        return state.fastForwardPosition() != BYPASS_FAST_FORWARD;
     }
 
     boolean isIdle() {
@@ -30,7 +30,7 @@ class FastForwarder {
     void fastForward() {
         fastForwarding = true;
 
-        animateToTab(state.getFastForwardPosition());
+        animateToTab(state.fastForwardPosition());
     }
 
     private void animateToTab(int newPosition) {
@@ -51,7 +51,7 @@ class FastForwarder {
     };
 
     boolean isFinished(int position, float positionOffset) {
-        return position == state.getFastForwardPosition() && positionOffset == 0F;
+        return position == state.fastForwardPosition() && positionOffset == 0F;
     }
 
     void reset() {

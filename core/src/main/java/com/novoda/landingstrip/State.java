@@ -1,6 +1,6 @@
 package com.novoda.landingstrip;
 
-class State {
+class State implements ReadOnlyState {
 
     private float pagePositionOffset;
     private int position;
@@ -28,15 +28,18 @@ class State {
         this.fastForwardPosition = fastForwardPosition;
     }
 
-    public float getPagePositionOffset() {
+    @Override
+    public float offset() {
         return pagePositionOffset;
     }
 
-    public int getPosition() {
+    @Override
+    public int position() {
         return position;
     }
 
-    public int getFastForwardPosition() {
+    @Override
+    public int fastForwardPosition() {
         return fastForwardPosition;
     }
 

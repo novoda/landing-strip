@@ -86,7 +86,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     }
 
     private boolean alreadyAt(int position) {
-        return position != state.getPosition();
+        return position != state.position();
     }
 
     private void forceDrawIndicatorAtPosition(int position) {
@@ -102,12 +102,16 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
             return;
         }
 
-        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculate(
-                state.getPosition(),
-                state.getPagePositionOffset(),
-                tabsContainerView
-        );
+        Coordinates indicatorCoordinates = calculateIndicatorCoordinates(state);
         drawIndicator(canvas, indicatorCoordinates);
+    }
+
+    protected Coordinates calculateIndicatorCoordinates(ReadOnlyState state) {
+        return indicatorCoordinatesCalculator.calculate(
+                    state.position(),
+                    state.offset(),
+                    tabsContainerView
+            );
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
