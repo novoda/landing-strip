@@ -8,22 +8,25 @@ import com.novoda.landingstrip.setup.Data;
 
 public class DemoFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    public DemoFragmentPagerAdapter(FragmentManager fm) {
+    private final Data[] data;
+
+    public DemoFragmentPagerAdapter(FragmentManager fm, Data[] data) {
         super(fm);
+        this.data = data;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Data.values()[position].getTitle();
+        return data[position].getTitle();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return ViewPagerFragment.newInstance(Data.values()[position]);
+        return ViewPagerFragment.newInstance(data[position]);
     }
 
     @Override
     public int getCount() {
-        return Data.values().length;
+        return data.length;
     }
 }

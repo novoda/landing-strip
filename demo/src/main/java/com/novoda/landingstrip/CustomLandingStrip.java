@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.landing_strip.R;
+import com.novoda.landingstrip.setup.Data;
 import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
 public class CustomLandingStrip extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class CustomLandingStrip extends AppCompatActivity {
 
         landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager(), Data.values()));
     }
 
     @Override
