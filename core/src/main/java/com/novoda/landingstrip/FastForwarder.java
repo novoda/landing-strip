@@ -7,13 +7,13 @@ class FastForwarder {
 
     static final int BYPASS_FAST_FORWARD = -1;
 
-    private final State state;
+    private final MutableState state;
     private final Scrollable scrollable;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
 
     private boolean fastForwarding = false;
 
-    FastForwarder(State state, Scrollable scrollable, ScrollOffsetCalculator scrollOffsetCalculator) {
+    FastForwarder(MutableState state, Scrollable scrollable, ScrollOffsetCalculator scrollOffsetCalculator) {
         this.state = state;
         this.scrollable = scrollable;
         this.scrollOffsetCalculator = scrollOffsetCalculator;

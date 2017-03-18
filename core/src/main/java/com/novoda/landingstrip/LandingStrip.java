@@ -13,7 +13,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     private final Attributes attributes;
     private final Paint indicatorPaint;
-    private final State state;
+    private final MutableState state;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private TabsContainerView tabsContainerView;
@@ -31,7 +31,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         indicatorPaint.setStyle(Paint.Style.FILL);
         indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColor()));
 
-        this.state = State.newInstance();
+        this.state = MutableState.newInstance();
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
     }
 
@@ -91,7 +91,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         drawIndicator(canvas, indicatorCoordinates);
     }
 
-    protected Coordinates calculateIndicatorCoordinates(ReadOnlyState state) {
+    protected Coordinates calculateIndicatorCoordinates(State state) {
         return indicatorCoordinatesCalculator.calculate(
                 state.position(),
                 state.offset(),

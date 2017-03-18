@@ -4,7 +4,7 @@ import android.support.v4.view.ViewPager;
 
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
-    private final State state;
+    private final MutableState state;
     private final TabsContainerView tabsContainerView;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
     private final Scrollable scrollable;
@@ -12,7 +12,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private boolean firstTimeAccessed = true;
 
-    ScrollingPageChangeListener(State state,
+    ScrollingPageChangeListener(MutableState state,
                                 TabsContainerView tabsContainerView,
                                 ScrollOffsetCalculator scrollOffsetCalculator,
                                 Scrollable scrollable,
