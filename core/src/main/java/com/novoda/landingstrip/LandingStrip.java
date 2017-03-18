@@ -142,8 +142,4 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         scrollingPageChangeListener.onPageScrollStateChanged(state);
     }
 
-    public void detach() {
-        // no op
-    }
-
 }
