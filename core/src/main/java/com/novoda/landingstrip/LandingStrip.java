@@ -25,7 +25,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         setFillViewport(true);
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
-
         this.attributes = Attributes.readAttributes(context, attrs);
         this.indicatorPaint = new Paint();
         indicatorPaint.setAntiAlias(true);
