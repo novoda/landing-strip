@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.Data;
-import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
+import com.novoda.landingstrip.setup.DemoPagerAdapter;
 
 public class SimpleTextTabActivity extends AppCompatActivity {
 
@@ -24,7 +24,7 @@ public class SimpleTextTabActivity extends AppCompatActivity {
     }
 
     private void populateViewPager(ViewPager viewPager, Data[] data) {
-        DemoFragmentPagerAdapter pagerAdapter = new DemoFragmentPagerAdapter(getSupportFragmentManager(), data);
+        DemoPagerAdapter pagerAdapter = DemoPagerAdapter.newInstance(this, data);
         viewPager.setAdapter(pagerAdapter);
     }
 

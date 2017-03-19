@@ -15,13 +15,6 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="com.novoda.landingstrip.CustomLandingStrip">
-      <intent-filter android:label="LS: Custom LS">
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-
   </application>
 
 </manifest>

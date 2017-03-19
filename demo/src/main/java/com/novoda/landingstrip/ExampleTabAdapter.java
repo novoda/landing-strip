@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.Data;
 
@@ -26,7 +25,7 @@ public class ExampleTabAdapter extends LandingStripAdapter<TextView> {
     }
 
     @Override
-    protected void bindView(final TextView view, final int position) {
+    protected void bindView(TextView view, final int position) {
         final Data itemData = data[position];
         view.setText(itemData.getTitle());
         view.setOnClickListener(new View.OnClickListener() {
