@@ -50,16 +50,41 @@ The tab strip which will contain the tab items
 <com.novoda.landingstrip.LandingStrip
   android:id="@+id/landing_strip"
   android:layout_height="50dp"
-  android:layout_width="match_parent"
-  android:background="@android:color/holo_orange_dark"
-  app:tabLayoutId="@layout/tab_simple_text" />
+  android:layout_width="match_parent" />
 ```
 
-Attaching the `ViewPager` to the `LandingStrip`
+Attaching the `ViewPager` to the `LandingStrip` and handling tab clicks.
 
 ```java
-LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-landingStrip.setViewPager(viewPager, viewPager.getAdapter());
+final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+final LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
+viewPager.addOnPageChangeListener(landingStrip);
+landingStrip.setAdapter(new LandingStripAdapter<TextView>() {
+
+    private final String titles[] = {"hello", "world"};
+
+    @Override
+    protected TextView createView(ViewGroup parent, int position) {
+        return (TextView) getLayoutInflater().inflate(R.layout.tab_simple_text, parent, false);
+    }
+
+    @Override
+    protected void bindView(TextView view, final int position) {
+        view.setText(titles[position]);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                landingStrip.setCurrentItem(position);
+                viewPager.setCurrentItem(position);
+            }
+        });
+    }
+
+    @Override
+    protected int getCount() {
+        return titles.length;
+    }
+});
 ```
 
 More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/landing-strip/wiki).
