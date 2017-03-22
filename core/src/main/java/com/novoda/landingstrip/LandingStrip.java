@@ -41,19 +41,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
         addView(tabsContainerView);
 
-        ScrollOffsetCalculator scrollOffsetCalculator = new ScrollOffsetCalculator(this, tabsContainerView);
-        FastForwarder fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
-
-        ScrollingPageChangeListener scrollingPageChangeListener = new ScrollingPageChangeListener(
-                state,
-                tabsContainerView,
-                scrollOffsetCalculator,
-                this,
-                fastForwarder
-        );
-
         notifier = new Notifier(tabsContainerView);
-        // do something with this
     }
 
     public <T extends View> void setAdapter(LandingStripAdapter<T> adapter) {
@@ -125,4 +113,11 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         invalidate();
     }
 
+    MutableState getMutableState() {
+        return state;
+    }
+
+    public TabsContainerView getTabsContainer() {
+        return tabsContainerView;
+    }
 }
