@@ -2,7 +2,7 @@ package com.novoda.landingstrip;
 
 import android.view.View;
 
-class Notifier implements LandingStripAdapter.Listener {
+class Notifier<T extends View> implements LandingStripAdapter.Listener<T> {
 
     private final TabsContainerView tabsContainerView;
 
@@ -11,11 +11,11 @@ class Notifier implements LandingStripAdapter.Listener {
     }
 
     @Override
-    public <T extends View> void onNotifyDataSetChanged(LandingStripAdapter<T> adapter) {
+    public void onNotifyDataSetChanged(LandingStripAdapter<T> adapter) {
         recreateAndBindTabs(adapter);
     }
 
-    private <T extends View> void recreateAndBindTabs(LandingStripAdapter<T> adapter) {
+    private void recreateAndBindTabs(LandingStripAdapter<T> adapter) {
         tabsContainerView.removeAllViews();
 
         for (int position = 0; position < adapter.getCount(); position++) {
@@ -26,7 +26,7 @@ class Notifier implements LandingStripAdapter.Listener {
     }
 
     @Override
-    public <T extends View> void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position) {
+    public void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position) {
         View tabView = tabsContainerView.getChildAt(position);
         adapter.bindView((T) tabView, position);
     }

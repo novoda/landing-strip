@@ -5,13 +5,13 @@ import android.view.ViewGroup;
 
 public abstract class LandingStripAdapter<T extends View> {
 
-    private Listener listener;
+    private Listener<T> listener;
 
     protected abstract T createView(ViewGroup parent, int position);
 
     protected abstract void bindView(T view, int position);
 
-    void setListener(Listener listener) {
+    void setListener(Listener<T> listener) {
         this.listener = listener;
     }
 
@@ -29,10 +29,10 @@ public abstract class LandingStripAdapter<T extends View> {
 
     protected abstract int getCount();
 
-    interface Listener {
+    interface Listener<T extends View> {
 
-        <T extends View> void onNotifyDataSetChanged(LandingStripAdapter<T> adapter);
+        void onNotifyDataSetChanged(LandingStripAdapter<T> adapter);
 
-        <T extends View> void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position);
+        void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position);
     }
 }
