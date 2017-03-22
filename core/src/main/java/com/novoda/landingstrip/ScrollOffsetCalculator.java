@@ -42,7 +42,9 @@ class ScrollOffsetCalculator {
 
     private float getNextTabDelta(int position, float pagerOffset, View tabForPosition) {
         if (hasTabAt(position + 1)) {
-            return (((tabsContainer.getChildAt(position + 1).getWidth()) - tabForPosition.getWidth()) * pagerOffset) * HALF_MULTIPLIER;
+            View nextTab = tabsContainer.getChildAt(position + 1);
+            int tabWidthDelta = (nextTab.getWidth()) - tabForPosition.getWidth();
+            return (tabWidthDelta * pagerOffset) * HALF_MULTIPLIER;
         }
         return 0F;
     }
