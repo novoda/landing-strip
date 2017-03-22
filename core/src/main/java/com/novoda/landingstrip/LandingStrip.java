@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 
-public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
+public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
     private final Attributes attributes;
     private final Paint indicatorPaint;
@@ -17,7 +16,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private TabsContainerView tabsContainerView;
-    private ScrollingPageChangeListener scrollingPageChangeListener;
     private Notifier notifier;
 
     public LandingStrip(Context context, AttributeSet attrs) {
@@ -46,7 +44,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         ScrollOffsetCalculator scrollOffsetCalculator = new ScrollOffsetCalculator(this, tabsContainerView);
         FastForwarder fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
 
-        this.scrollingPageChangeListener = new ScrollingPageChangeListener(
+        ScrollingPageChangeListener scrollingPageChangeListener = new ScrollingPageChangeListener(
                 state,
                 tabsContainerView,
                 scrollOffsetCalculator,
@@ -55,6 +53,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         );
 
         notifier = new Notifier(tabsContainerView);
+        // do something with this
     }
 
     public <T extends View> void setAdapter(LandingStripAdapter<T> adapter) {
@@ -124,21 +123,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     public void scrollTo(int x, int y) {
         super.scrollTo(x, y);
         invalidate();
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        scrollingPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        scrollingPageChangeListener.onPageSelected(position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        scrollingPageChangeListener.onPageScrollStateChanged(state);
     }
 
 }
