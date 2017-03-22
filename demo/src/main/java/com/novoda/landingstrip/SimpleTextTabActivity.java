@@ -39,8 +39,8 @@ public class SimpleTextTabActivity extends AppCompatActivity {
             }
         };
         ExampleTabAdapter tabAdapter = new ExampleTabAdapter(getLayoutInflater(), setCurrentItemOnClick, data);
-
-        viewPager.addOnPageChangeListener(landingStrip);
+        ViewPager.OnPageChangeListener landingStripPageChanger = LandingStripPageChangeListener.create(landingStrip);
+        viewPager.addOnPageChangeListener(landingStripPageChanger);
         landingStrip.setAdapter(tabAdapter);
     }
 

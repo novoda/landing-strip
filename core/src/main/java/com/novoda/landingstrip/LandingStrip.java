@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 
-public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
+public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
     private final Attributes attributes;
     private final Paint indicatorPaint;
@@ -17,7 +16,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private TabsContainerView tabsContainerView;
-    private ScrollingPageChangeListener scrollingPageChangeListener;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,17 +39,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         this.tabsContainerView = new TabsContainerView(getContext());
         tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
         addView(tabsContainerView);
-
-        ScrollOffsetCalculator scrollOffsetCalculator = new ScrollOffsetCalculator(this, tabsContainerView);
-        FastForwarder fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
-
-        this.scrollingPageChangeListener = new ScrollingPageChangeListener(
-                state,
-                tabsContainerView,
-                scrollOffsetCalculator,
-                this,
-                fastForwarder
-        );
     }
 
     public <T extends View> void setAdapter(LandingStripAdapter<T> adapter) {
@@ -124,19 +111,11 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
         invalidate();
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        scrollingPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+    MutableState getMutableState() {
+        return state;
     }
 
-    @Override
-    public void onPageSelected(int position) {
-        scrollingPageChangeListener.onPageSelected(position);
+    TabsContainerView getTabsContainer() {
+        return tabsContainerView;
     }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        scrollingPageChangeListener.onPageScrollStateChanged(state);
-    }
-
 }
