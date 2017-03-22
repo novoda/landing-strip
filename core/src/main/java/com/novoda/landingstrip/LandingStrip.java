@@ -18,7 +18,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     private TabsContainerView tabsContainerView;
     private ScrollingPageChangeListener scrollingPageChangeListener;
-    private Notifier notifier;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -53,11 +52,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
                 this,
                 fastForwarder
         );
-
-        notifier = new Notifier(tabsContainerView);
     }
 
     public <T extends View> void setAdapter(LandingStripAdapter<T> adapter) {
+        Notifier<T> notifier = new Notifier<T>(tabsContainerView);
         adapter.setListener(notifier);
         adapter.notifyDataSetChanged();
     }
