@@ -16,7 +16,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private TabsContainerView tabsContainerView;
-    private Notifier notifier;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,11 +39,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.tabsContainerView = new TabsContainerView(getContext());
         tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
         addView(tabsContainerView);
-
-        notifier = new Notifier(tabsContainerView);
     }
 
     public <T extends View> void setAdapter(LandingStripAdapter<T> adapter) {
+        Notifier<T> notifier = new Notifier<T>(tabsContainerView);
         adapter.setListener(notifier);
         adapter.notifyDataSetChanged();
     }
@@ -117,7 +115,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         return state;
     }
 
-    public TabsContainerView getTabsContainer() {
+    TabsContainerView getTabsContainer() {
         return tabsContainerView;
     }
 }
