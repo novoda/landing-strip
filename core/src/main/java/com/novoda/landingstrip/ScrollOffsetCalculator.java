@@ -22,7 +22,7 @@ class ScrollOffsetCalculator {
         } else {
             View tabForPosition = tabsContainer.getChildAt(position);
 
-            float tabStartX = tabForPosition.getLeft() + getHorizontalScrollOffset(position, pagerOffset);
+            float tabStartX = tabForPosition.getLeft() + getHorizontalScrollOffset(tabForPosition, pagerOffset);
             float viewMiddleOffset = rootView.getWidth() * HALF_MULTIPLIER;
             float tabCenterOffset = (tabForPosition.getRight() - tabForPosition.getLeft()) * HALF_MULTIPLIER;
             float nextTabDelta = getNextTabDelta(position, pagerOffset, tabForPosition);
@@ -35,8 +35,8 @@ class ScrollOffsetCalculator {
         return (int) (input + ROUNDING_OFFSET);
     }
 
-    private int getHorizontalScrollOffset(int position, float pagerOffset) {
-        int tabWidth = tabsContainer.getChildAt(position).getWidth();
+    private int getHorizontalScrollOffset(View tab, float pagerOffset) {
+        int tabWidth = tab.getWidth();
         return Math.round(pagerOffset * tabWidth);
     }
 
