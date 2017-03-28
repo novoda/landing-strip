@@ -7,4 +7,6 @@ interface State {
     float offset();
 
     int fastForwardPosition();
+
+    boolean firstTimeAccessed();
 }
