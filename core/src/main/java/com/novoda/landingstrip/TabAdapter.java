@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class DefaultAdapter<T extends View> extends LandingStripAdapter<T> {
+public class TabAdapter<T extends View> extends BaseAdapter<T> {
 
     private final LayoutInflater layoutInflater;
     @LayoutRes
@@ -15,7 +15,7 @@ public class DefaultAdapter<T extends View> extends LandingStripAdapter<T> {
     private final LandingStrip landingStrip;
     private final ViewPager viewPager;
 
-    public DefaultAdapter(LayoutInflater layoutInflater, int itemLayoutId, LandingStrip landingStrip, ViewPager viewPager) {
+    public TabAdapter(LayoutInflater layoutInflater, int itemLayoutId, LandingStrip landingStrip, ViewPager viewPager) {
         this.layoutInflater = layoutInflater;
         this.itemLayoutId = itemLayoutId;
         this.landingStrip = landingStrip;

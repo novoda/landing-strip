@@ -33,17 +33,17 @@ public class SimpleTextTabActivity extends AppCompatActivity {
 
     private void populateTabs(final ViewPager viewPager) {
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        DefaultAdapter defaultAdapter = new TitledAdapter(
+        TabAdapter tabAdapter = new TitledAdapter(
                 getLayoutInflater(),
                 R.layout.tab_simple_text,
                 landingStrip,
                 viewPager
         );
-        landingStrip.setAdapter(defaultAdapter);
+        landingStrip.setAdapter(tabAdapter);
         viewPager.addOnPageChangeListener(landingStrip);
     }
 
-    static class TitledAdapter extends DefaultAdapter<TextView> {
+    static class TitledAdapter extends TabAdapter<TextView> {
 
         private final ViewPager viewPager;
 
