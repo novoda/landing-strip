@@ -10,8 +10,6 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     private final Scrollable scrollable;
     private final FastForwarder fastForwarder;
 
-    private boolean firstTimeAccessed = true;
-
     ScrollingPageChangeListener(MutableState state,
                                 TabsContainerView tabsContainerView,
                                 ScrollOffsetCalculator scrollOffsetCalculator,
@@ -36,9 +34,9 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     }
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
-        if (firstTimeAccessed) {
+        if (state.firstTimeAccessed()) {
             tabsContainerView.setActivated(position);
-            firstTimeAccessed = false;
+            state.updateFirstTimeAccessed(false);
         }
     }
 

@@ -53,38 +53,47 @@ The tab strip which will contain the tab items
   android:layout_width="match_parent" />
 ```
 
-Attaching the `ViewPager` to the `LandingStrip` and handling tab clicks.
+A `TabAdapter` implementation to set the tab titles from `PagerAdapter.getPageTitle`
 
 ```java
-final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-final LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
+static class TitledAdapter extends TabAdapter<TextView> {
+
+    private final ViewPager viewPager;
+
+    public TitledAdapter(LayoutInflater layoutInflater, int itemLayoutId, LandingStrip landingStrip, ViewPager viewPager) {
+        super(layoutInflater, itemLayoutId, landingStrip, viewPager);
+        this.viewPager = viewPager;
+    }
+
+    @Override
+    protected void bindView(TextView view, int position) {
+        super.bindView(view, position);
+        bindPageTitleToView(view, position);
+    }
+
+    private void bindPageTitleToView(TextView itemView, int position) {
+        PagerAdapter adapter = viewPager.getAdapter();
+        if (adapter == null) {
+            return;
+        }
+        itemView.setText(adapter.getPageTitle(position));
+    }
+
+}
+```
+
+Attach the `TabAdapter` to the `LandingStrip` and the `LandingStrip` to the `ViewPager`.
+
+```java
+LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
+TabAdapter tabAdapter = new TitledAdapter(
+        getLayoutInflater(),
+        R.layout.tab_simple_text,
+        landingStrip,
+        viewPager
+);
+landingStrip.setAdapter(tabAdapter);
 viewPager.addOnPageChangeListener(landingStrip);
-landingStrip.setAdapter(new LandingStripAdapter<TextView>() {
-
-    private final String titles[] = {"hello", "world"};
-
-    @Override
-    protected TextView createView(ViewGroup parent, int position) {
-        return (TextView) getLayoutInflater().inflate(R.layout.tab_simple_text, parent, false);
-    }
-
-    @Override
-    protected void bindView(TextView view, final int position) {
-        view.setText(titles[position]);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                landingStrip.setCurrentItem(position);
-                viewPager.setCurrentItem(position);
-            }
-        });
-    }
-
-    @Override
-    protected int getCount() {
-        return titles.length;
-    }
-});
 ```
 
 More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/landing-strip/wiki).

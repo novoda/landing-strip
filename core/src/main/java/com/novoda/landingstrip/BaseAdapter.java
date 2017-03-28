@@ -3,7 +3,7 @@ package com.novoda.landingstrip;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class LandingStripAdapter<T extends View> {
+public abstract class BaseAdapter<T extends View> {
 
     private Listener<T> listener;
 
@@ -31,8 +31,8 @@ public abstract class LandingStripAdapter<T extends View> {
 
     interface Listener<T extends View> {
 
-        void onNotifyDataSetChanged(LandingStripAdapter<T> adapter);
+        void onNotifyDataSetChanged(BaseAdapter<T> adapter);
 
-        void onNotifyItemChanged(LandingStripAdapter<T> adapter, int position);
+        void onNotifyItemChanged(BaseAdapter<T> adapter, int position);
     }
 }
