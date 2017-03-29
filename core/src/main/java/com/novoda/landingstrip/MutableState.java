@@ -6,6 +6,7 @@ class MutableState implements State {
     private int position;
     private int fastForwardPosition;
     private boolean firstTimeAccessed;
+    private int selectedPosition;
 
     public static MutableState newInstance() {
         MutableState state = new MutableState();
@@ -34,6 +35,10 @@ class MutableState implements State {
         this.firstTimeAccessed = firstTimeAccessed;
     }
 
+    public void updateSelectedPosition(int selectedPosition) {
+        this.selectedPosition = selectedPosition;
+    }
+
     @Override
     public float offset() {
         return pagePositionOffset;
@@ -52,5 +57,10 @@ class MutableState implements State {
     @Override
     public boolean firstTimeAccessed() {
         return firstTimeAccessed;
+    }
+
+    @Override
+    public int selectedPosition() {
+        return selectedPosition;
     }
 }

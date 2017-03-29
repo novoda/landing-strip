@@ -75,6 +75,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     private void forceDrawIndicatorAtPosition(int position) {
         state.updatePosition(position);
         state.updatePositionOffset(0);
+        tabsContainerView.setActivated(position);
         invalidate();
     }
 

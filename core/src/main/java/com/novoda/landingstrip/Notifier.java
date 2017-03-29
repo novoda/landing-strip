@@ -29,8 +29,8 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
     }
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(BaseAdapter<T> adapter) {
-        if (state.firstTimeAccessed() && adapter.getCount() > 0) {
-            tabsContainerView.setActivated(state.position());
+        if (adapter.getCount() > 0) {
+            tabsContainerView.setActivated(state.selectedPosition());
             state.updateFirstTimeAccessed(false);
         }
     }
