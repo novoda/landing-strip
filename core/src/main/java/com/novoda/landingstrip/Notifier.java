@@ -5,14 +5,17 @@ import android.view.View;
 class Notifier<T extends View> implements BaseAdapter.Listener<T> {
 
     private final TabsContainerView tabsContainerView;
+    private final MutableState state;
 
-    Notifier(TabsContainerView tabsContainerView) {
+    Notifier(TabsContainerView tabsContainerView, MutableState state) {
         this.tabsContainerView = tabsContainerView;
+        this.state = state;
     }
 
     @Override
     public void onNotifyDataSetChanged(BaseAdapter<T> adapter) {
         recreateAndBindTabs(adapter);
+        handleAdapterSetBecausePageSelectedIsNotCalled();
     }
 
     private void recreateAndBindTabs(BaseAdapter<T> adapter) {
@@ -22,6 +25,13 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
             T view = adapter.createView(tabsContainerView, position);
             adapter.bindView(view, position);
             tabsContainerView.addView(view);
+        }
+    }
+
+    private void handleAdapterSetBecausePageSelectedIsNotCalled() {
+        if (state.firstTimeAccessed()) {
+            tabsContainerView.setActivated(state.position());
+            state.updateFirstTimeAccessed(false);
         }
     }
 

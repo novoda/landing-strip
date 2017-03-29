@@ -55,7 +55,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     }
 
     public <T extends View> void setAdapter(BaseAdapter<T> adapter) {
-        Notifier<T> notifier = new Notifier<T>(tabsContainerView);
+        Notifier<T> notifier = new Notifier<T>(tabsContainerView, state);
         adapter.setListener(notifier);
         adapter.notifyDataSetChanged();
     }
