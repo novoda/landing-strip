@@ -55,7 +55,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     }
 
     public <T extends View> void setAdapter(BaseAdapter<T> adapter) {
-        Notifier<T> notifier = new Notifier<T>(tabsContainerView);
+        Notifier<T> notifier = new Notifier<T>(tabsContainerView, state);
         adapter.setListener(notifier);
         adapter.notifyDataSetChanged();
     }
@@ -75,6 +75,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     private void forceDrawIndicatorAtPosition(int position) {
         state.updatePosition(position);
         state.updatePositionOffset(0);
+        tabsContainerView.setActivated(position);
         invalidate();
     }
 
@@ -126,11 +127,17 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (tabsContainerView.getChildCount() == 0) {
+            return;
+        }
         scrollingPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     @Override
     public void onPageSelected(int position) {
+        if (tabsContainerView.getChildCount() == 0) {
+            return;
+        }
         scrollingPageChangeListener.onPageSelected(position);
     }
 

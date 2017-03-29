@@ -5,14 +5,17 @@ import android.view.View;
 class Notifier<T extends View> implements BaseAdapter.Listener<T> {
 
     private final TabsContainerView tabsContainerView;
+    private final MutableState state;
 
-    Notifier(TabsContainerView tabsContainerView) {
+    Notifier(TabsContainerView tabsContainerView, MutableState state) {
         this.tabsContainerView = tabsContainerView;
+        this.state = state;
     }
 
     @Override
     public void onNotifyDataSetChanged(BaseAdapter<T> adapter) {
         recreateAndBindTabs(adapter);
+        initializeSelectedPosition();
     }
 
     private void recreateAndBindTabs(BaseAdapter<T> adapter) {
@@ -23,6 +26,10 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
             adapter.bindView(view, position);
             tabsContainerView.addView(view);
         }
+    }
+
+    private void initializeSelectedPosition() {
+        tabsContainerView.setActivated(state.selectedPosition());
     }
 
     @Override
