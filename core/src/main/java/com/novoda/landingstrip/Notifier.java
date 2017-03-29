@@ -28,17 +28,18 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
         }
     }
 
+    @Override
+    public void onNotifyItemChanged(BaseAdapter<T> adapter, int position) {
+        View tabView = tabsContainerView.getChildAt(position);
+        adapter.bindView((T) tabView, position);
+        handleAdapterSetBecausePageSelectedIsNotCalled(adapter);
+    }
+
     private void handleAdapterSetBecausePageSelectedIsNotCalled(BaseAdapter<T> adapter) {
         if (state.firstTimeAccessed() && adapter.getCount() > 0) {
             tabsContainerView.setActivated(state.position());
             state.updateFirstTimeAccessed(false);
         }
-    }
-
-    @Override
-    public void onNotifyItemChanged(BaseAdapter<T> adapter, int position) {
-        View tabView = tabsContainerView.getChildAt(position);
-        adapter.bindView((T) tabView, position);
     }
 
 }
