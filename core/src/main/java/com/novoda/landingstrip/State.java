@@ -8,7 +8,5 @@ interface State {
 
     int fastForwardPosition();
 
-    boolean firstTimeAccessed();
-
     int selectedPosition();
 }

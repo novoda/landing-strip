@@ -30,7 +30,6 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
 
     private void initializeSelectedPosition() {
         tabsContainerView.setActivated(state.selectedPosition());
-        state.updateFirstTimeAccessed(false);
     }
 
     @Override
