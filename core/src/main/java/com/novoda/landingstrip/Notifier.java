@@ -15,7 +15,7 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
     @Override
     public void onNotifyDataSetChanged(BaseAdapter<T> adapter) {
         recreateAndBindTabs(adapter);
-        handleAdapterSetBecausePageSelectedIsNotCalled();
+        handleAdapterSetBecausePageSelectedIsNotCalled(adapter);
     }
 
     private void recreateAndBindTabs(BaseAdapter<T> adapter) {
@@ -28,8 +28,8 @@ class Notifier<T extends View> implements BaseAdapter.Listener<T> {
         }
     }
 
-    private void handleAdapterSetBecausePageSelectedIsNotCalled() {
-        if (state.firstTimeAccessed()) {
+    private void handleAdapterSetBecausePageSelectedIsNotCalled(BaseAdapter<T> adapter) {
+        if (state.firstTimeAccessed() && adapter.getCount() > 0) {
             tabsContainerView.setActivated(state.position());
             state.updateFirstTimeAccessed(false);
         }
