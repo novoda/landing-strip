@@ -126,11 +126,17 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (tabsContainerView.getChildCount() == 0) {
+            return;
+        }
         scrollingPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     @Override
     public void onPageSelected(int position) {
+        if (tabsContainerView.getChildCount() == 0) {
+            return;
+        }
         scrollingPageChangeListener.onPageSelected(position);
     }
 
