@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 class Attributes {
 
     @ColorRes
-    private static final int DEFAULT_INDICATOR_COLOUR = R.color.ls__white;
+    private static final int DEFAULT_INDICATOR_COLOR = R.color.ls__white;
 
     @DimenRes
     private static final int DEFAULT_INDICATOR_HEIGHT = R.dimen.ls__default_indicator_height;
@@ -29,12 +29,12 @@ class Attributes {
         TypedArray xml = context.obtainStyledAttributes(attrs, R.styleable.LandingStrip);
 
         try {
-            int indicatorColour = xml.getResourceId(R.styleable.LandingStrip_indicatorColor, DEFAULT_INDICATOR_COLOUR);
+            int indicatorColor = xml.getResourceId(R.styleable.LandingStrip_indicatorColor, DEFAULT_INDICATOR_COLOR);
             int indicatorHeight = getDimensPixelSize(R.styleable.LandingStrip_indicatorHeight, DEFAULT_INDICATOR_HEIGHT, xml);
             int tabsPaddingLeft = getDimensPixelSize(R.styleable.LandingStrip_tabsLeftPadding, DEFAULT_TABS_PADDING, xml);
             int tabsPaddingRight = getDimensPixelSize(R.styleable.LandingStrip_tabsRightPadding, DEFAULT_TABS_PADDING, xml);
 
-            return new Attributes(indicatorColour, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
+            return new Attributes(indicatorColor, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
         } finally {
             xml.recycle();
         }
