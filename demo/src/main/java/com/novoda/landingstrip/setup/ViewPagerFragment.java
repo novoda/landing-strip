@@ -1,4 +1,4 @@
-package com.novoda.landingstrip.setup.fragment;
+package com.novoda.landingstrip.setup;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.novoda.landing_strip.R;
-import com.novoda.landingstrip.setup.Data;
 
 public class ViewPagerFragment extends Fragment {
 

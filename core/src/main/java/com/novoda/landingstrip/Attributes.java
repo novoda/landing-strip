@@ -5,24 +5,18 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
-import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 
 class Attributes {
 
     @ColorRes
-    private static final int DEFAULT_INDICATOR_COLOUR = R.color.ls__white;
+    private static final int DEFAULT_INDICATOR_COLOR = R.color.ls__white;
 
     @DimenRes
     private static final int DEFAULT_INDICATOR_HEIGHT = R.dimen.ls__default_indicator_height;
 
     @DimenRes
     private static final int DEFAULT_TABS_PADDING = R.dimen.ls__default_tabs_container_padding;
-
-    private static final int MISSING_TAB_LAYOUT_ID = -1;
-
-    @LayoutRes
-    private final int tabLayoutId;
 
     @ColorRes
     private final int indicatorColor;
@@ -35,26 +29,15 @@ class Attributes {
         TypedArray xml = context.obtainStyledAttributes(attrs, R.styleable.LandingStrip);
 
         try {
-            int tabLayoutId = xml.getResourceId(R.styleable.LandingStrip_tabLayoutId, MISSING_TAB_LAYOUT_ID);
-
-            throwIfTabLayoutIsMissing(tabLayoutId);
-
-            int indicatorColour = xml.getResourceId(R.styleable.LandingStrip_indicatorColor, DEFAULT_INDICATOR_COLOUR);
+            int indicatorColor = xml.getResourceId(R.styleable.LandingStrip_indicatorColor, DEFAULT_INDICATOR_COLOR);
             int indicatorHeight = getDimensPixelSize(R.styleable.LandingStrip_indicatorHeight, DEFAULT_INDICATOR_HEIGHT, xml);
             int tabsPaddingLeft = getDimensPixelSize(R.styleable.LandingStrip_tabsLeftPadding, DEFAULT_TABS_PADDING, xml);
             int tabsPaddingRight = getDimensPixelSize(R.styleable.LandingStrip_tabsRightPadding, DEFAULT_TABS_PADDING, xml);
 
-            return new Attributes(tabLayoutId, indicatorColour, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
+            return new Attributes(indicatorColor, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
         } finally {
             xml.recycle();
         }
-    }
-
-    private static void throwIfTabLayoutIsMissing(int tabLayoutId) {
-        if (tabLayoutId != MISSING_TAB_LAYOUT_ID) {
-            return;
-        }
-        throw new MissingTabLayoutIdException();
     }
 
     private static int getDimensPixelSize(int styleIndex, @DimenRes int defaultSize, TypedArray attributes) {
@@ -66,16 +49,11 @@ class Attributes {
         return resources.getDimensionPixelSize(dimens);
     }
 
-    Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColor, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
-        this.tabLayoutId = tabLayoutId;
+    Attributes(@ColorRes int indicatorColor, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
         this.indicatorColor = indicatorColor;
         this.indicatorHeight = indicatorHeight;
         this.tabsPaddingLeft = tabsPaddingLeft;
         this.tabsPaddingRight = tabsPaddingRight;
-    }
-
-    int getTabLayoutId() {
-        return tabLayoutId;
     }
 
     int getIndicatorColor() {
@@ -94,9 +72,4 @@ class Attributes {
         return tabsPaddingRight;
     }
 
-    static class MissingTabLayoutIdException extends RuntimeException {
-        MissingTabLayoutIdException() {
-            super("No tabLayoutId has been set, you need to set one!");
-        }
-    }
 }

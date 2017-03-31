@@ -7,20 +7,20 @@ class FastForwarder {
 
     static final int BYPASS_FAST_FORWARD = -1;
 
-    private final State state;
+    private final MutableState state;
     private final Scrollable scrollable;
     private final ScrollOffsetCalculator scrollOffsetCalculator;
 
     private boolean fastForwarding = false;
 
-    FastForwarder(State state, Scrollable scrollable, ScrollOffsetCalculator scrollOffsetCalculator) {
+    FastForwarder(MutableState state, Scrollable scrollable, ScrollOffsetCalculator scrollOffsetCalculator) {
         this.state = state;
         this.scrollable = scrollable;
         this.scrollOffsetCalculator = scrollOffsetCalculator;
     }
 
     boolean shouldHandleFastForward() {
-        return state.getFastForwardPosition() != BYPASS_FAST_FORWARD;
+        return state.fastForwardPosition() != BYPASS_FAST_FORWARD;
     }
 
     boolean isIdle() {
@@ -30,7 +30,10 @@ class FastForwarder {
     void fastForward() {
         fastForwarding = true;
 
-        animateToTab(state.getFastForwardPosition());
+        int fastForwardPosition = state.fastForwardPosition();
+        if (fastForwardPosition != BYPASS_FAST_FORWARD) {
+            animateToTab(fastForwardPosition);
+        }
     }
 
     private void animateToTab(int newPosition) {
@@ -51,7 +54,7 @@ class FastForwarder {
     };
 
     boolean isFinished(int position, float positionOffset) {
-        return position == state.getFastForwardPosition() && positionOffset == 0F;
+        return position == state.fastForwardPosition() && positionOffset == 0F;
     }
 
     void reset() {

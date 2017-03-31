@@ -4,106 +4,98 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.HorizontalScrollView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class LandingStrip extends HorizontalScrollView implements Scrollable {
-
-    private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
+public class LandingStrip extends HorizontalScrollView implements Scrollable, ViewPager.OnPageChangeListener {
 
     private final Attributes attributes;
-    private final LayoutInflater layoutInflater;
     private final Paint indicatorPaint;
-    private final State state;
+    private final MutableState state;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
-    private final PagerAdapterObserver pagerAdapterObserver;
-    private final TabsContainer tabsContainer;
-    private final ScrollOffsetCalculator scrollOffsetCalculator;
-    private final FastForwarder fastForwarder;
-    private final List<ScrollingPageChangeListener> scrollingPageChangeListeners;
 
-    private ViewPager viewPager;
-    private TabSetterUpper tabSetterUpper;
-    private OnPageChangedListenerCollection onPageChangeListenerCollection;
+    private TabsContainerView tabsContainerView;
+    private ScrollingPageChangeListener scrollingPageChangeListener;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
         setFillViewport(true);
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
-
         this.attributes = Attributes.readAttributes(context, attrs);
-        this.state = State.newInstance();
-        this.layoutInflater = LayoutInflater.from(context);
         this.indicatorPaint = new Paint();
-        this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
-        this.pagerAdapterObserver = new PagerAdapterObserver(new OnPagerAdapterChangedListener() {
-            @Override
-            public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
-                notifyDataSetChanged(pagerAdapter);
-            }
-        });
-        this.tabsContainer = TabsContainer.newInstance(context, attributes);
-        this.scrollOffsetCalculator = new ScrollOffsetCalculator(tabsContainer);
-        this.fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
-
-        this.onPageChangeListenerCollection = OnPageChangedListenerCollection.newInstance();
-        this.scrollingPageChangeListeners = new ArrayList<>();
-        state.updatePosition(0);
-        state.updatePositionOffset(0);
-
         indicatorPaint.setAntiAlias(true);
         indicatorPaint.setStyle(Paint.Style.FILL);
         indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColor()));
 
-        tabsContainer.attachTo(this);
+        this.state = MutableState.newInstance();
+        this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
     }
 
-    public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        onPageChangeListenerCollection.add(onPageChangeListener);
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        this.tabsContainerView = new TabsContainerView(getContext());
+        tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
+        addView(tabsContainerView);
+
+        ScrollOffsetCalculator scrollOffsetCalculator = new ScrollOffsetCalculator(this, tabsContainerView);
+        FastForwarder fastForwarder = new FastForwarder(state, this, scrollOffsetCalculator);
+
+        this.scrollingPageChangeListener = new ScrollingPageChangeListener(
+                state,
+                tabsContainerView,
+                scrollOffsetCalculator,
+                this,
+                fastForwarder
+        );
     }
 
-    public void attach(ViewPager viewPager) {
-        attach(viewPager, viewPager.getAdapter());
+    public <T extends View> void setAdapter(BaseAdapter<T> adapter) {
+        Notifier<T> notifier = new Notifier<T>(tabsContainerView, state);
+        adapter.setListener(notifier);
+        adapter.notifyDataSetChanged();
     }
 
-    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB_SETTER_UPPER);
-    }
-
-    private static final TabSetterUpper SIMPLE_TEXT_TAB_SETTER_UPPER = new TabSetterUpper() {
-        @Override
-        public View setUp(int position, CharSequence title, View inflatedTab) {
-            ((TextView) inflatedTab).setText(title);
-            inflatedTab.setFocusable(true);
-            return inflatedTab;
+    public void setCurrentItem(int position) {
+        if (alreadyAt(position)) {
+            return;
         }
-    };
+        state.updateFastForwardPosition(position);
+        forceDrawIndicatorAtPosition(position);
+    }
 
-    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
-        this.viewPager = viewPager;
-        this.tabSetterUpper = tabSetterUpper;
+    private boolean alreadyAt(int position) {
+        return position != state.position();
+    }
 
-        pagerAdapterObserver.registerTo(pagerAdapter);
-        pagerAdapterObserver.onChanged();
+    private void forceDrawIndicatorAtPosition(int position) {
+        state.updatePosition(position);
+        state.updatePositionOffset(0);
+        tabsContainerView.setActivated(position);
+        invalidate();
     }
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         super.dispatchDraw(canvas);
-        if (tabsContainer.isEmpty()) {
+        if (tabsContainerView.getChildCount() == 0) {
             return;
         }
 
-        drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state.getPosition(), state.getPagePositionOffset(), tabsContainer));
+        Coordinates indicatorCoordinates = calculateIndicatorCoordinates(state);
+        drawIndicator(canvas, indicatorCoordinates);
+    }
+
+    protected Coordinates calculateIndicatorCoordinates(State state) {
+        return indicatorCoordinatesCalculator.calculate(
+                state.position(),
+                state.offset(),
+                tabsContainerView
+        );
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
@@ -134,79 +126,24 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        pagerAdapterObserver.reregister();
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (tabsContainerView.getChildCount() == 0) {
+            return;
+        }
+        scrollingPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-        pagerAdapterObserver.unregister();
-        super.onDetachedFromWindow();
-    }
-
-    private void notifyDataSetChanged(PagerAdapter pagerAdapter) {
-        tabsContainer.clearTabs();
-        int tabCount = pagerAdapter.getCount();
-        for (int position = 0; position < tabCount; position++) {
-            CharSequence title = pagerAdapter.getPageTitle(position);
-            View inflatedTabView = tabsContainer.inflateTab(layoutInflater, attributes.getTabLayoutId());
-            addTab(position, title, inflatedTabView, tabSetterUpper);
+    public void onPageSelected(int position) {
+        if (tabsContainerView.getChildCount() == 0) {
+            return;
         }
-        ScrollingPageChangeListener scrollingPageChangeListener = new ScrollingPageChangeListener(state, tabsContainer,
-                scrollOffsetCalculator, this, fastForwarder, onPageChangeListenerCollection);
-        removeAllListenersFrom(viewPager);
-        trackAttachedListener(scrollingPageChangeListener);
-        tabsContainer.scrollToCurrentItem(viewPager, scrollingPageChangeListener);
+        scrollingPageChangeListener.onPageSelected(position);
     }
 
-    private void removeAllListenersFrom(ViewPager viewPager) {
-        for (ScrollingPageChangeListener listener : scrollingPageChangeListeners) {
-            viewPager.removeOnPageChangeListener(listener);
-        }
-        scrollingPageChangeListeners.clear();
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        scrollingPageChangeListener.onPageScrollStateChanged(state);
     }
 
-    private void trackAttachedListener(ScrollingPageChangeListener listener) {
-        scrollingPageChangeListeners.add(listener);
-    }
-
-    private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
-        tabView = tabSetterUpper.setUp(position, title, tabView);
-        tabsContainer.addTab(tabView, position);
-        tabView.setOnClickListener(onTabClick);
-        tabView.setTag(TAG_KEY_POSITION, position);
-    }
-
-    private final OnClickListener onTabClick = new OnClickListener() {
-        @Override
-        public void onClick(@NonNull View view) {
-            int position = (int) view.getTag(TAG_KEY_POSITION);
-            if (notAlreadyAt(position)) {
-                state.updateFastForwardPosition(position);
-                forceDrawIndicatorAtPosition(position);
-            }
-            viewPager.setCurrentItem(position);
-        }
-    };
-
-    private boolean notAlreadyAt(int position) {
-        return position != state.getPosition();
-    }
-
-    private void forceDrawIndicatorAtPosition(int position) {
-        state.updatePosition(position);
-        state.updatePositionOffset(0);
-        invalidate();
-    }
-
-    public void detach() {
-        if (viewPager != null) {
-            removeAllListenersFrom(viewPager);
-        }
-    }
-
-    public interface TabSetterUpper {
-        View setUp(int position, CharSequence title, View inflatedTab);
-    }
 }

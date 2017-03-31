@@ -50,16 +50,50 @@ The tab strip which will contain the tab items
 <com.novoda.landingstrip.LandingStrip
   android:id="@+id/landing_strip"
   android:layout_height="50dp"
-  android:layout_width="match_parent"
-  android:background="@android:color/holo_orange_dark"
-  app:tabLayoutId="@layout/tab_simple_text" />
+  android:layout_width="match_parent" />
 ```
 
-Attaching the `ViewPager` to the `LandingStrip`
+A `TabAdapter` implementation to set the tab titles from `PagerAdapter.getPageTitle`
+
+```java
+static class TitledAdapter extends TabAdapter<TextView> {
+
+    private final ViewPager viewPager;
+
+    public TitledAdapter(LayoutInflater layoutInflater, int itemLayoutId, LandingStrip landingStrip, ViewPager viewPager) {
+        super(layoutInflater, itemLayoutId, landingStrip, viewPager);
+        this.viewPager = viewPager;
+    }
+
+    @Override
+    protected void bindView(TextView view, int position) {
+        super.bindView(view, position);
+        bindPageTitleToView(view, position);
+    }
+
+    private void bindPageTitleToView(TextView itemView, int position) {
+        PagerAdapter adapter = viewPager.getAdapter();
+        if (adapter == null) {
+            return;
+        }
+        itemView.setText(adapter.getPageTitle(position));
+    }
+
+}
+```
+
+Attach the `TabAdapter` to the `LandingStrip` and the `LandingStrip` to the `ViewPager`.
 
 ```java
 LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-landingStrip.setViewPager(viewPager, viewPager.getAdapter());
+TabAdapter tabAdapter = new TitledAdapter(
+        getLayoutInflater(),
+        R.layout.tab_simple_text,
+        landingStrip,
+        viewPager
+);
+landingStrip.setAdapter(tabAdapter);
+viewPager.addOnPageChangeListener(landingStrip);
 ```
 
 More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/landing-strip/wiki).

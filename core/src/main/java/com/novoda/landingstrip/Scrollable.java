@@ -1,6 +1,6 @@
 package com.novoda.landingstrip;
 
-public interface Scrollable {
+interface Scrollable {
     void scrollTo(int x);
 
     int getCurrentScrollX();

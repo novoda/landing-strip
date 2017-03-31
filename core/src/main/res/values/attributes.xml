@@ -2,7 +2,6 @@
 <resources>
 
   <declare-styleable name="LandingStrip">
-    <attr name="tabLayoutId" format="reference" />
     <attr name="indicatorColor" format="color" />
     <attr name="indicatorHeight" format="dimension" />
     <attr name="tabsLeftPadding" format="dimension" />

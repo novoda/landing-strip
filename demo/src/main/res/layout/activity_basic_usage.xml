@@ -10,7 +10,6 @@
     android:layout_height="50dp"
     android:layout_width="match_parent"
     android:background="@android:color/holo_orange_dark"
-    app:tabLayoutId="@layout/tab_simple_text"
     app:indicatorColor="@android:color/white"
     app:tabsLeftPadding="140dp"
     app:tabsRightPadding="140dp" />
