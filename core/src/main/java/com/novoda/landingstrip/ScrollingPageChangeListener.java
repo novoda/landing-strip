@@ -53,7 +53,6 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     @Override
     public void onPageSelected(int position) {
-        state.updateSelectedPosition(position);
         tabsContainerView.setActivated(position);
     }
 
