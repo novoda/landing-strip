@@ -61,15 +61,8 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
     }
 
     public void setCurrentItem(int position) {
-        if (alreadyAt(position)) {
-            return;
-        }
         state.updateFastForwardPosition(position);
         forceDrawIndicatorAtPosition(position);
-    }
-
-    private boolean alreadyAt(int position) {
-        return position != state.position();
     }
 
     private void forceDrawIndicatorAtPosition(int position) {
@@ -135,6 +128,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, Vi
 
     @Override
     public void onPageSelected(int position) {
+        state.updateSelectedPosition(position);
         if (tabsContainerView.getChildCount() == 0) {
             return;
         }
